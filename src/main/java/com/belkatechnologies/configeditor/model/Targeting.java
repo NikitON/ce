@@ -5,11 +5,11 @@ import org.simpleframework.xml.Root;
 
 @Root
 public class Targeting {
-    @Element
+    @Element(required = false)
     private String sex;
-    @Element
+    @Element(required = false)
     private String age;
-    @Element
+    @Element(required = false)
     private String countries;
     @Element(required = false)
     private String cities;

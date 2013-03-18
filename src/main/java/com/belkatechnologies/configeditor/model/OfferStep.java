@@ -20,4 +20,12 @@ public class OfferStep {
     private String rewardValue;
     @Element(required = false, name = "type")
     private String rewardType;
+
+    public String getRewardValue() {
+        return rewardValue;
+    }
+
+    public void setRewardValue(String rewardValue) {
+        this.rewardValue = rewardValue;
+    }
 }

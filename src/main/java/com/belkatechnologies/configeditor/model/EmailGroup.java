@@ -4,7 +4,7 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Author: Nikita Khvorov
@@ -16,5 +16,5 @@ public class EmailGroup {
     @Attribute
     private String id;
     @ElementList(entry = "email")
-    private List<String> emails;
+    private ArrayList<String> emails;
 }

@@ -17,7 +17,7 @@ public class OpenXMLListener extends IOXMLListener {
         int result = fileChooser.showOpenDialog(null);
         if (result == JFileChooser.APPROVE_OPTION) {
             try {
-                TreeManager.getInstance().buildXMLTree(fileChooser.getSelectedFile());
+                TreeManager.getInstance().deserializeXML(fileChooser.getSelectedFile());
             } catch (Exception e1) {
                 e1.printStackTrace();
             }

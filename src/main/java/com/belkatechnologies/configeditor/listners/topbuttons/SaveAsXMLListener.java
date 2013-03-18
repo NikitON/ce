@@ -4,7 +4,6 @@ import com.belkatechnologies.configeditor.managers.TreeManager;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 
 /**
  * Author: Nikita Khvorov
@@ -19,7 +18,7 @@ public class SaveAsXMLListener extends IOXMLListener {
         if (result == JFileChooser.APPROVE_OPTION) {
             try {
                 TreeManager.getInstance().serializeTree(fileChooser.getSelectedFile());
-            } catch (IOException e1) {
+            } catch (Exception e1) {
                 e1.printStackTrace();
             }
         }

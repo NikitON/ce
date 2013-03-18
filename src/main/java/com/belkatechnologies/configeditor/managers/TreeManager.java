@@ -3,13 +3,11 @@ package com.belkatechnologies.configeditor.managers;
 import com.belkatechnologies.configeditor.model.BORConfig;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.stream.Format;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * Author: Nikita Khvorov
@@ -20,7 +18,7 @@ public class TreeManager {
 
     private JPanel treePanel;
     private BORConfig borConfig;
-    private String fileName;
+    private File openedFile;
 
     public static TreeManager getInstance() {
         return ourInstance;
@@ -28,7 +26,7 @@ public class TreeManager {
 
     private TreeManager() {
         treePanel = new JPanel();
-        treePanel.setPreferredSize(new Dimension(300, 500));
+        treePanel.setPreferredSize(new Dimension(400, 500));
         treePanel.setBackground(new Color(0xD1E0F5));
     }
 
@@ -36,22 +34,27 @@ public class TreeManager {
         return treePanel;
     }
 
-    public String getFileName() {
-        return fileName;
+    public void serializeOpenedTree() throws Exception {
+        serializeTree(openedFile);
     }
 
-    public void serializeTree(File file) throws IOException {
-
+    public void serializeTree(File file) throws Exception {
+        serializeTree(new FileOutputStream(file));
     }
 
-    public void buildXMLTree(File file) throws Exception {
-        fileName = file.getAbsolutePath();
-        buildXMLTree(new FileInputStream(file));
+    public void serializeTree(OutputStream outputStream) throws Exception {
+        Format format = new Format(4);
+        Serializer serializer = new Persister(format);
+        serializer.write(borConfig, outputStream);
     }
 
-    private void buildXMLTree(InputStream inputStream) throws Exception {
+    public void deserializeXML(File file) throws Exception {
+        openedFile = file;
+        deserializeXML(new FileInputStream(file));
+    }
+
+    public void deserializeXML(InputStream inputStream) throws Exception {
         Serializer serializer = new Persister();
         borConfig = serializer.read(BORConfig.class, inputStream);
-        System.out.println(1);
     }
 }

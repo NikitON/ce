@@ -1,11 +1,11 @@
 package com.belkatechnologies.configeditor;
 
-import com.belkatechnologies.configeditor.listners.topbuttons.OpenXMLListener;
-import com.belkatechnologies.configeditor.listners.topbuttons.SaveAsXMLListener;
+import com.belkatechnologies.configeditor.listners.topbuttons.*;
 import com.belkatechnologies.configeditor.managers.TreeManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 /**
  * Author: Nikita Khvorov
@@ -35,42 +35,34 @@ public class ConfigEditor extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
         addOpenButtons(panel);
-        JSeparator separator = new JSeparator();
-        separator.setPreferredSize(new Dimension(20, 0));
-        panel.add(separator);
+        addSeparator(panel);
         addSaveButtons(panel);
         panel.setBackground(new Color(0x9BBCE9));
         return panel;
     }
 
     private static void addOpenButtons(JPanel panel) {
-        addOpenLocalButton(panel);
-        JButton downloadStaging = new JButton("Download Staging");
-        JButton downloadProduction = new JButton("Download Production");
-        panel.add(downloadStaging);
-        panel.add(downloadProduction);
+        addButton(panel, "Open", new OpenXMLListener());
+        addButton(panel, "Download Staging", new DownloadXMLListener(true));
+        addButton(panel, "Download Production", new DownloadXMLListener(false));
+    }
 
+    private static void addSeparator(JPanel panel) {
+        JSeparator separator = new JSeparator();
+        separator.setPreferredSize(new Dimension(40, 0));
+        panel.add(separator);
     }
 
     private static void addSaveButtons(JPanel panel) {
-        JButton save = new JButton("Save");
-        addSaveAsLocalButton(panel);
-        JButton loadToStaging = new JButton("Load to Staging");
-        JButton loadToProduction = new JButton("Load to Production");
-        panel.add(save);
-        panel.add(loadToStaging);
-        panel.add(loadToProduction);
+        addButton(panel, "Save", new SaveXMLListener());
+        addButton(panel, "Save As", new SaveAsXMLListener());
+        addButton(panel, "Load to Staging", new LoadToServerXMLListener(true));
+        addButton(panel, "Load to Production", new LoadToServerXMLListener(false));
     }
 
-    private static void addOpenLocalButton(JPanel panel) {
-        JButton button = new JButton("Open XML");
-        button.addActionListener(new OpenXMLListener());
-        panel.add(button);
-    }
-
-    private static void addSaveAsLocalButton(JPanel panel) {
-        JButton button = new JButton("Save As");
-        button.addActionListener(new SaveAsXMLListener());
+    private static void addButton(JPanel panel, String buttonName, ActionListener listener) {
+        JButton button = new JButton(buttonName);
+        button.addActionListener(listener);
         panel.add(button);
     }
 
