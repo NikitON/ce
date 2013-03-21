@@ -1,6 +1,9 @@
 package com.belkatechnologies.configeditor.managers;
 
 import com.belkatechnologies.configeditor.model.BORConfig;
+import com.belkatechnologies.configeditor.model.Credentials;
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
@@ -39,13 +42,40 @@ public class TreeManager {
     }
 
     public void serializeTree(File file) throws Exception {
-        serializeTree(new FileOutputStream(file));
+        getDefaultSerializer().write(borConfig, file);
     }
 
-    public void serializeTree(OutputStream outputStream) throws Exception {
-        Format format = new Format(4);
-        Serializer serializer = new Persister(format);
-        serializer.write(borConfig, outputStream);
+    public void uploadTree(String server, String path, Credentials credentials) {
+        FTPClient ftpClient = new FTPClient();
+        try {
+            ftpClient.connect(server, 21);
+            ftpClient.login(credentials.getUsername(), credentials.getPassword());
+            ftpClient.enterLocalPassiveMode();
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            OutputStream outputStream = ftpClient.storeFileStream(path);
+            try {
+                getDefaultSerializer().write(borConfig, outputStream);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ftpClient.isConnected()) {
+                    ftpClient.logout();
+                    ftpClient.disconnect();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void deserializeXML(File file) throws Exception {
@@ -56,5 +86,9 @@ public class TreeManager {
     public void deserializeXML(InputStream inputStream) throws Exception {
         Serializer serializer = new Persister();
         borConfig = serializer.read(BORConfig.class, inputStream);
+    }
+
+    private static Serializer getDefaultSerializer() {
+        return new Persister(new Format(4));
     }
 }

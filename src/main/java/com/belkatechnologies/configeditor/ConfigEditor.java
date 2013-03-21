@@ -56,8 +56,8 @@ public class ConfigEditor extends JFrame {
     private static void addSaveButtons(JPanel panel) {
         addButton(panel, "Save", new SaveXMLListener());
         addButton(panel, "Save As", new SaveAsXMLListener());
-        addButton(panel, "Load to Staging", new LoadToServerXMLListener(true));
-        addButton(panel, "Load to Production", new LoadToServerXMLListener(false));
+        addButton(panel, "Load to Staging", new UploadXMLListener(true));
+        addButton(panel, "Load to Production", new UploadXMLListener(false));
     }
 
     private static void addButton(JPanel panel, String buttonName, ActionListener listener) {
