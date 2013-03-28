@@ -12,7 +12,9 @@ import java.awt.*;
  * Date: 28.03.13
  */
 public class OffersTreeCellRenderer extends DefaultTreeCellRenderer {
-    private static final Color ACTIVE_COLOR = new Color(0x9DFA80);
+    private static final Color ACTIVE_COLOR = new Color(0x15E600);
+    private static final Color ACTIVE_COLOR_BORDER = new Color(0x008A00);
+    private static final Color ACTIVE_COLOR_NON_SELECTION = new Color(0x9AFA83);
     private DefaultTreeCellRenderer defaultTreeCellRenderer = new DefaultTreeCellRenderer();
 
     @Override
@@ -23,12 +25,16 @@ public class OffersTreeCellRenderer extends DefaultTreeCellRenderer {
             if (leaf) {
                 String appId = node.getParent().toString();
                 if (TreeManager.getInstance().isActive(appId, node.toString())) {
-                    setBackgroundNonSelectionColor(ACTIVE_COLOR);
+                    setBackgroundNonSelectionColor(ACTIVE_COLOR_NON_SELECTION);
+                    setBackgroundSelectionColor(ACTIVE_COLOR);
+                    setBorderSelectionColor(ACTIVE_COLOR_BORDER);
                     return this;
                 }
             } else {
                 if (TreeManager.getInstance().isActive(node.toString())) {
-                    setBackgroundNonSelectionColor(ACTIVE_COLOR);
+                    setBackgroundNonSelectionColor(ACTIVE_COLOR_NON_SELECTION);
+                    setBackgroundSelectionColor(ACTIVE_COLOR);
+                    setBorderSelectionColor(ACTIVE_COLOR_BORDER);
                     return this;
                 }
             }
