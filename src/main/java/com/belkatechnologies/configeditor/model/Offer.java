@@ -1,11 +1,14 @@
 package com.belkatechnologies.configeditor.model;
 
+import com.belkatechnologies.utils.DateUtil;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Author: Nikita Khvorov
@@ -163,5 +166,14 @@ public class Offer {
 
     public String getGameSlogan() {
         return gameSlogan;
+    }
+
+    public boolean isActive() {
+        try {
+            Date now = new Date();
+            return DateUtil.getDate(startDate).before(now) && now.before(DateUtil.getDate(endDate));
+        } catch (ParseException e) {
+            return false;
+        }
     }
 }

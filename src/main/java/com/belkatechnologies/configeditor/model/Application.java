@@ -34,6 +34,24 @@ public class Application {
         return offers;
     }
 
+    public Offer getOfferByID(String id) {
+        for (Offer offer : offers) {
+            if (offer.getId().equals(id)) {
+                return offer;
+            }
+        }
+        return null;
+    }
+
+    public boolean isActive() {
+        for (Offer offer : offers) {
+            if (offer.isActive()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String getDefaultRewardValue() {
         return defaultRewardValue;
     }

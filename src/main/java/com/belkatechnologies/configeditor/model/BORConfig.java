@@ -20,4 +20,13 @@ public class BORConfig {
     public ArrayList<Application> getApps() {
         return apps;
     }
+
+    public Application getAppByID(String id) {
+        for (Application app : apps) {
+            if (app.getId().equals(id)) {
+                return app;
+            }
+        }
+        return null;
+    }
 }

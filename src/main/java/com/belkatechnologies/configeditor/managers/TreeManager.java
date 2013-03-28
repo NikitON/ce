@@ -1,6 +1,7 @@
 package com.belkatechnologies.configeditor.managers;
 
 import com.belkatechnologies.configeditor.gui.GUI;
+import com.belkatechnologies.configeditor.gui.OffersTree;
 import com.belkatechnologies.configeditor.model.Application;
 import com.belkatechnologies.configeditor.model.BORConfig;
 import com.belkatechnologies.configeditor.model.Credentials;
@@ -11,7 +12,6 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
 
-import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +25,7 @@ import java.io.OutputStream;
 public class TreeManager {
     private static TreeManager ourInstance = new TreeManager();
 
-    private JTree tree;
+    private OffersTree tree;
     private BORConfig borConfig;
     private File openedFile;
 
@@ -96,11 +96,19 @@ public class TreeManager {
             }
             root.add(appNode);
         }
-        tree = new JTree(root);
+        tree = new OffersTree(root);
         GUI.getInstance().repaintTreePanel(tree);
     }
 
     private Serializer getDefaultSerializer() {
         return new Persister(new Format(4));
+    }
+
+    public boolean isActive(String appId) {
+        return borConfig.getAppByID(appId).isActive();
+    }
+
+    public boolean isActive(String appId, String offerId) {
+        return borConfig.getAppByID(appId).getOfferByID(offerId).isActive();
     }
 }

@@ -62,6 +62,7 @@ public class GUI {
 
     public void repaintTreePanel(JTree tree) {
         treePanel.replaceScrollPane(tree);
+        treePanel.repaint();
         treePanel.revalidate();
     }
 
