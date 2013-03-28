@@ -1,6 +1,6 @@
 package com.belkatechnologies.configeditor.listners.topbuttons;
 
-import com.belkatechnologies.configeditor.managers.TreeManager;
+import com.belkatechnologies.configeditor.gui.GUI;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.net.URLConnection;
  * Author: Nikita Khvorov
  * Date: 18.03.13
  */
-public class DownloadXMLListener extends IOXMLListener {
+public class DownloadXMLListener extends OpenXMLListener {
     private String xmlURL;
 
     public DownloadXMLListener(boolean staging) {
@@ -20,14 +20,20 @@ public class DownloadXMLListener extends IOXMLListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        try {
-            URL url = new URL(xmlURL);
-            URLConnection connection = url.openConnection();
-            TreeManager.getInstance().deserializeXML(connection.getInputStream());
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    GUI.getInstance().runLoading("Downloading from server");
+                    URL url = new URL(xmlURL);
+                    URLConnection connection = url.openConnection();
+                    deserializeXML(connection.getInputStream());
+                } catch (IOException e1) {
+                    GUI.getInstance().showErrorMessageDialog("Connection failed", "Try again.");
+                } finally {
+                    GUI.getInstance().stopLoading();
+                }
+            }
+        }).start();
     }
 }

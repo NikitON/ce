@@ -1,5 +1,6 @@
 package com.belkatechnologies.configeditor.listners.topbuttons;
 
+import com.belkatechnologies.configeditor.gui.GUI;
 import com.belkatechnologies.configeditor.model.Credentials;
 
 import java.awt.event.ActionListener;
@@ -35,5 +36,17 @@ public abstract class IOXMLListener implements ActionListener {
 
     protected Credentials getCredentials(boolean staging) {
         return staging ? STAGING_CREDENTIALS : PRODUCTION_CREDENTIALS;
+    }
+
+    protected void notifyWithExceptionMessage(Exception e) {
+        GUI.getInstance().notifyWithExceptionMessage("XML ERROR", e);
+    }
+
+    protected void notifyWithExceptionTrace(Exception e) {
+        GUI.getInstance().notifyWithExceptionTrace("XML ERROR", e);
+    }
+
+    protected void showXMLErrorMessageDialog(String message) {
+        GUI.getInstance().showErrorMessageDialog("XML ERROR", message);
     }
 }

@@ -1,5 +1,6 @@
 package com.belkatechnologies.configeditor.listners.topbuttons;
 
+import com.belkatechnologies.configeditor.gui.GUI;
 import com.belkatechnologies.configeditor.managers.TreeManager;
 
 import java.awt.event.ActionEvent;
@@ -11,10 +12,18 @@ import java.awt.event.ActionEvent;
 public class SaveXMLListener extends IOXMLListener {
     @Override
     public void actionPerformed(ActionEvent e) {
-        try {
-            TreeManager.getInstance().serializeOpenedTree();
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    GUI.getInstance().runLoading("Saving file");
+                    TreeManager.getInstance().serializeOpenedTree();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                } finally {
+                    GUI.getInstance().stopLoading();
+                }
+            }
+        }).start();
     }
 }

@@ -37,4 +37,8 @@ public class Application {
     public String getDefaultRewardValue() {
         return defaultRewardValue;
     }
+
+    public String getId() {
+        return id;
+    }
 }

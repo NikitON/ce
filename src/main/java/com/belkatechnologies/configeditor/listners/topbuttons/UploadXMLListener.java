@@ -1,5 +1,6 @@
 package com.belkatechnologies.configeditor.listners.topbuttons;
 
+import com.belkatechnologies.configeditor.gui.GUI;
 import com.belkatechnologies.configeditor.managers.TreeManager;
 import com.belkatechnologies.configeditor.model.Credentials;
 
@@ -22,10 +23,22 @@ public class UploadXMLListener extends IOXMLListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                GUI.getInstance().runLoading("Uploading to " + server);
+                uploadTree();
+            }
+        }).start();
+    }
+
+    private void uploadTree() {
         try {
             TreeManager.getInstance().uploadTree(server, path, credentials);
-        } catch (Exception e1) {
-            e1.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            GUI.getInstance().stopLoading();
         }
     }
 }

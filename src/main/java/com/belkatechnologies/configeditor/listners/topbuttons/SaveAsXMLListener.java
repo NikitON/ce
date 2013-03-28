@@ -1,5 +1,6 @@
 package com.belkatechnologies.configeditor.listners.topbuttons;
 
+import com.belkatechnologies.configeditor.gui.GUI;
 import com.belkatechnologies.configeditor.managers.TreeManager;
 
 import javax.swing.*;
@@ -13,10 +14,15 @@ import java.io.File;
 public class SaveAsXMLListener extends IOXMLListener {
     public static final String XML_EXTENSION = ".xml";
 
+    private JFileChooser fileChooser;
+
+    public SaveAsXMLListener() {
+        fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(CURRENT_DIRECTORY);
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(CURRENT_DIRECTORY);
         int result = fileChooser.showSaveDialog(null);
         if (result == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
@@ -24,11 +30,19 @@ public class SaveAsXMLListener extends IOXMLListener {
             if (!path.endsWith(XML_EXTENSION)) {
                 fileChooser.setSelectedFile(new File(path + XML_EXTENSION));
             }
-            try {
-                TreeManager.getInstance().serializeTree(fileChooser.getSelectedFile());
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        GUI.getInstance().runLoading("Saving to " + fileChooser.getSelectedFile().getName());
+                        TreeManager.getInstance().serializeTree(fileChooser.getSelectedFile());
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    } finally {
+                        GUI.getInstance().stopLoading();
+                    }
+                }
+            }).start();
         }
     }
 }
