@@ -15,4 +15,22 @@ public class Targeting {
     private String cities;
     @Element(required = false)
     private String groups;
+    @Element(required = false)
+    private String idEnds;
+
+    public Targeting() {
+    }
+
+    public Targeting(String sex, String age, String countries, String cities, String groups, String idEnds) {
+        this.sex = sex.equals("all") || sex.equals("") ? null : sex;
+        this.age = age.equals("all") || age.equals("") ? null : age;
+        this.countries = countries.equals("all") || countries.equals("") ? null : countries;
+        this.cities = cities.equals("") ? null : cities;
+        this.groups = groups.equals("") ? null : groups;
+        this.idEnds = idEnds.equals("") ? null : idEnds;
+    }
+
+    public boolean isNull() {
+        return sex == null && age == null && countries == null && cities == null && groups == null && idEnds == null;
+    }
 }

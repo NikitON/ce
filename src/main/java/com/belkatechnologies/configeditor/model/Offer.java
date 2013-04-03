@@ -25,6 +25,8 @@ public class Offer {
     private String incrementLevelDateOffset;
     @Element(required = false)
     private String minLevel;
+    @Element(required = false)
+    private String newOnly;
     @Element
     private String targetURL;
     @Element(required = false)
@@ -33,9 +35,9 @@ public class Offer {
     private String referralURL;
     @ElementList(entry = "image")
     private ArrayList<String> images;
-    @Element
+    @Element(required = false)
     private String title;
-    @Element
+    @Element(required = false)
     private String price;
     @Element(required = false)
     private String shortDescriptions;
@@ -68,6 +70,38 @@ public class Offer {
     @Element(required = false)
     private String gameSlogan;
 
+    public Offer() {
+    }
+
+    public Offer(String id, String incrementLevel, String incrementLevelDateOffset, String minLevel, String newOnly, String targetURL, String targetURLFormat, String referralURL, ArrayList<String> images, String title, String price, String shortDescriptions, String description, String rewardText, ArrayList<OfferStep> steps, Targeting targeting, Checker checker, ArrayList<String> admins, String showLimit, String clickLimit, String startDate, String endDate, String length, String sleepTime, String extraParams, String gameSlogan) {
+        this.id = id;
+        this.incrementLevel = incrementLevel.equals("") ? null : incrementLevel;
+        this.incrementLevelDateOffset = incrementLevelDateOffset.equals("") ? null : incrementLevelDateOffset;
+        this.minLevel = minLevel.equals("") ? null : minLevel;
+        this.newOnly = newOnly.equals("") ? null : newOnly;
+        this.targetURL = targetURL;
+        this.targetURLFormat = targetURLFormat.equals("") ? null : targetURLFormat;
+        this.referralURL = referralURL.equals("") ? null : referralURL;
+        this.images = images;
+        this.title = title.equals("") ? null : title;
+        this.price = price.equals("") ? null : price;
+        this.shortDescriptions = shortDescriptions.equals("") ? null : shortDescriptions;
+        this.description = description.equals("") ? null : description;
+        this.rewardText = rewardText.equals("") ? null : rewardText;
+        this.steps = steps;
+        this.targeting = targeting.isNull() ? null : targeting;
+        this.checker = checker;
+        this.admins = admins.isEmpty() ? null : admins;
+        this.showLimit = showLimit.equals("") ? null : showLimit;
+        this.clickLimit = clickLimit.equals("") ? null : clickLimit;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.length = length;
+        this.sleepTime = sleepTime;
+        this.extraParams = extraParams.equals("") ? null : extraParams;
+        this.gameSlogan = gameSlogan.equals("") ? null : gameSlogan;
+    }
+
     public String getId() {
         return id;
     }
@@ -82,6 +116,14 @@ public class Offer {
 
     public String getMinLevel() {
         return minLevel;
+    }
+
+    public String getNewOnly() {
+        return newOnly;
+    }
+
+    public void setNewOnly(String newOnly) {
+        this.newOnly = newOnly;
     }
 
     public String getTargetURL() {
@@ -168,6 +210,14 @@ public class Offer {
         return gameSlogan;
     }
 
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
     public boolean isActive() {
         try {
             Date now = new Date();
@@ -175,5 +225,10 @@ public class Offer {
         } catch (ParseException e) {
             return false;
         }
+    }
+
+    @Override
+    public String toString() {
+        return id;
     }
 }

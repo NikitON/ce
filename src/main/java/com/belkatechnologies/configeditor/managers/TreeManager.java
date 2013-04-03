@@ -2,21 +2,32 @@ package com.belkatechnologies.configeditor.managers;
 
 import com.belkatechnologies.configeditor.gui.GUI;
 import com.belkatechnologies.configeditor.gui.OffersTree;
-import com.belkatechnologies.configeditor.model.Application;
-import com.belkatechnologies.configeditor.model.BORConfig;
-import com.belkatechnologies.configeditor.model.Credentials;
-import com.belkatechnologies.configeditor.model.Offer;
+import com.belkatechnologies.configeditor.model.*;
+import com.belkatechnologies.utils.DateUtil;
+import com.belkatechnologies.utils.StringUtil;
+import com.belkatechnologies.utils.TimeUtil;
+import com.belkatechnologies.utils.XMLUtil;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 
 /**
  * Author: Nikita Khvorov
@@ -87,17 +98,210 @@ public class TreeManager {
         rebuildPanelTree();
     }
 
+    public void deserializeOldXML(InputStream inputStream) throws Exception {
+
+        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream);
+        doc.normalize();
+        ArrayList<EmailGroup> emails = parseEmails(doc);
+        ArrayList<Application> apps = parseApps(doc);
+        borConfig = new BORConfig(emails, apps);
+        rebuildPanelTree();
+    }
+
+    private ArrayList<EmailGroup> parseEmails(Document doc) {
+        ArrayList<EmailGroup> emails = new ArrayList<EmailGroup>();
+        NodeList emailsNode = doc.getElementsByTagName("emails");
+        if (emailsNode != null && emailsNode.getLength() != 0) {
+            NodeList groupXMLList = XMLUtil.getNodesByName(emailsNode.item(0), "group");
+            for (int i = 0; i < groupXMLList.getLength(); i++) {
+                String groupName = XMLUtil.getAttribute(groupXMLList.item(i), "id");
+                NodeList emailXMLList = XMLUtil.getNodesByName(groupXMLList.item(i), "email");
+                ArrayList<String> groupEmails = new ArrayList<String>();
+                for (int j = 0; j < emailXMLList.getLength(); j++) {
+                    groupEmails.add(emailXMLList.item(j).getTextContent());
+                }
+                emails.add(new EmailGroup(groupName, groupEmails));
+            }
+        }
+        return emails;
+    }
+
+    private ArrayList<Application> parseApps(Document doc) throws Exception {
+        ArrayList<Application> apps = new ArrayList<Application>();
+        NodeList appList = doc.getElementsByTagName("app");
+        for (int j = 0; j < appList.getLength(); j++) {
+            Node appNode = appList.item(j);
+            String id = XMLUtil.getAttribute(appNode, "id");
+            String explicitRewards = XMLUtil.getAttribute(appNode, "explicitRewards");
+            String link = XMLUtil.getAttribute(appNode, "link");
+            Element element = (Element) appNode;
+            Node wordsNode = element.getElementsByTagName("words").item(0);
+            ArrayList<RewardWord> rewardWords = parseWords(wordsNode);
+            String defaultRewardValue = XMLUtil.getDataFromNode(element.getElementsByTagName("defaultRewardValue"));
+            String defaultRewardType = XMLUtil.getDataFromNode(element.getElementsByTagName("defaultRewardType"));
+            String oldUsersTable = XMLUtil.getDataFromNode(element.getElementsByTagName("oldUsersTable"));
+            ArrayList<Offer> offerList = parseOffers((Element) appNode);
+            apps.add(new Application(id, explicitRewards, link, defaultRewardValue, defaultRewardType, rewardWords, oldUsersTable, offerList));
+        }
+        return apps;
+    }
+
+    private ArrayList<RewardWord> parseWords(Node wordsNode) throws Exception {
+        ArrayList<RewardWord> rewardWords = new ArrayList<RewardWord>();
+        NodeList wordsList = ((Element) wordsNode).getElementsByTagName("word");
+        for (int i = 0; i < wordsList.getLength(); i++) {
+            Element word = (Element) wordsList.item(i);
+            String id = XMLUtil.getAttribute(word, "id");
+            String form1 = XMLUtil.getDataFromNode(word.getElementsByTagName("form" + 1));
+            String form2 = XMLUtil.getDataFromNode(word.getElementsByTagName("form" + 2));
+            String form3 = XMLUtil.getDataFromNode(word.getElementsByTagName("form" + 3));
+            rewardWords.add(new RewardWord(id, form1, form2, form3));
+        }
+        return rewardWords;
+    }
+
+    private ArrayList<Offer> parseOffers(Element appNode) throws Exception {
+        NodeList offersNode = appNode.getElementsByTagName("offers");
+        NodeList offerXMLList = XMLUtil.getNodesByName(offersNode.item(0), "offer");
+        ArrayList<Offer> offerList = new ArrayList<Offer>();
+        for (int i = 0; i < offerXMLList.getLength(); i++) {
+            Node node = offerXMLList.item(i);
+            String id = XMLUtil.getAttribute(node, "id");
+            if (id.contains(":")) {
+                id = id.split(":")[1];
+            }
+            String incrementLevel = XMLUtil.getAttribute(node, "incrementLevel");
+            String incrementLevelDateOffset = XMLUtil.getAttribute(node, "incrementLevelDateOffset");
+            String minLevel = XMLUtil.getAttribute(node, "minLevel");
+            String newOnly = XMLUtil.getAttribute(node, "newOnly");
+            String targetURL = XMLUtil.getAttribute(node, "targetURL");
+            String targetUrlFormat = XMLUtil.getAttribute(node, "targetURLFormat");
+            String referalURL = XMLUtil.getAttribute(node, "referalURL");
+            ArrayList<String> images = parseImages(node);
+            Element element = (Element) node;
+            String title = XMLUtil.getDataFromNode(element.getElementsByTagName("title"));
+            String price = XMLUtil.getDataFromNode(element.getElementsByTagName("price")).replaceAll(",", ".");
+            String shortDescriptions = XMLUtil.getDataFromNode(element.getElementsByTagName("shortDescriptions"));
+            String offerDescription = XMLUtil.getDataFromNode(element.getElementsByTagName("offerDescription"));
+            String description = offerDescription.contains("%R_TYPE%") ? offerDescription : "";
+            String rewardTextOld = XMLUtil.getDataFromNode(element.getElementsByTagName("rewardText"));
+            String rewardText = rewardTextOld.contains("%R_TYPE%") ? rewardTextOld : "";
+            ArrayList<OfferStep> steps = parseSteps(node);
+            Element targetingNode = (Element) element.getElementsByTagName("targeting").item(0);
+            String sexStr = XMLUtil.getDataFromNode(targetingNode.getElementsByTagName("sex"));
+            String ageStr = XMLUtil.getDataFromNode(targetingNode.getElementsByTagName("age"));
+            String countryStr = XMLUtil.getDataFromNode(targetingNode.getElementsByTagName("country"));
+            String cityStr = XMLUtil.getDataFromNode(targetingNode.getElementsByTagName("city"));
+            String groupsStr = XMLUtil.getDataFromNode(targetingNode.getElementsByTagName("groups"));
+            String idEnds = XMLUtil.getDataFromNode(targetingNode.getElementsByTagName("idEnds"));
+            Targeting targeting = new Targeting(sexStr, ageStr, countryStr, cityStr, groupsStr, idEnds);
+            Element checkerNode = (Element) element.getElementsByTagName("checkState").item(0);
+            String checkUrl = XMLUtil.getAttribute(element.getElementsByTagName("checkState").item(0), "checkUrl");
+            String statsUrl = XMLUtil.getAttribute(element.getElementsByTagName("checkState").item(0), "statsUrl");
+            String strategy = XMLUtil.getDataFromNode(checkerNode.getElementsByTagName("strategy")).trim();
+            String params = XMLUtil.getDataFromNode(checkerNode.getElementsByTagName("params")).trim();
+            String wrappers = XMLUtil.getAttribute(element.getElementsByTagName("checkState").item(0), "wrappers");
+            String seed = XMLUtil.getAttribute(element.getElementsByTagName("checkState").item(0), "seed");
+            String interval = XMLUtil.getAttribute(element.getElementsByTagName("checkState").item(0), "interval");
+            String maxUsers = XMLUtil.getAttribute(element.getElementsByTagName("checkState").item(0), "maxUsers");
+            Checker checker = new Checker(strategy, checkUrl, statsUrl, params, wrappers, seed, interval, maxUsers);
+            ArrayList<String> adminList = parseAdmins(element);
+            String showLimit = XMLUtil.getDataFromNode(element.getElementsByTagName("showLimit"));
+            String clickLimit = XMLUtil.getDataFromNode(element.getElementsByTagName("clickLimit"));
+            String startDate1 = XMLUtil.getDataFromNode(element.getElementsByTagName("startDate"));
+            Date date = DateUtil.getDate(startDate1, "dd.MM.yyyy HH:mm");
+            String startDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date);
+            String endDate1 = XMLUtil.getDataFromNode(element.getElementsByTagName("endDate"));
+            date = DateUtil.getDate(endDate1, "dd.MM.yyyy HH:mm");
+            String endDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date);
+            String length = XMLUtil.getDataFromNode(element.getElementsByTagName("offerLength"));
+            String sleepTime = XMLUtil.getDataFromNode(element.getElementsByTagName("sleepTime"));
+            String extraParams = XMLUtil.getDataFromNode(element.getElementsByTagName("extraParams"));
+            String gameSlogan = XMLUtil.getDataFromNode(element.getElementsByTagName("gameSlogan"));
+            Offer offer = new Offer(id, incrementLevel, incrementLevelDateOffset, minLevel, newOnly, targetURL, targetUrlFormat, referalURL, images, title, price, shortDescriptions, description, rewardText, steps, targeting, checker, adminList, showLimit, clickLimit, startDate, endDate, length, sleepTime, extraParams, gameSlogan);
+            offerList.add(offer);
+        }
+        return offerList;
+    }
+
+    private ArrayList<OfferStep> parseSteps(Node node) throws Exception {
+        ArrayList<OfferStep> steps = new ArrayList<OfferStep>();
+        String[] levels = XMLUtil.getAttribute(node, "level").split("\\|");
+        int stepCount = levels.length;
+        String[] rewardValues = getDataArray(XMLUtil.getAttribute(node, "rewardValue"), stepCount);
+        String[] rewardTypes = getDataArray(XMLUtil.getAttribute(node, "rewardType"), stepCount);
+        Element element = (Element) node;
+        String[] rewardTexts = getRewardTexts(element, stepCount);
+        String[] descriptions = getDescriptions(element, stepCount);
+        for (int i = 0; i < stepCount; i++) {
+            steps.add(new OfferStep(levels[i], descriptions[i], rewardTexts[i], rewardValues[i], rewardTypes[i]));
+        }
+        return steps;
+    }
+
+    private String[] getDescriptions(Element element, int steps) throws Exception {
+        String line = XMLUtil.getDataFromNode(element.getElementsByTagName("offerDescription"));
+        return line.contains("%R_TYPE%") ? getDataArray("", steps) : getDataArray(line, steps);
+    }
+
+    private String[] getRewardTexts(Element element, int steps) throws Exception {
+        String line = XMLUtil.getDataFromNode(element.getElementsByTagName("rewardText"));
+        return line.contains("%R_TYPE%") ? getDataArray("", steps) : getDataArray(line, steps);
+    }
+
+    private String[] getDataArray(String dataLine, int steps) {
+        String[] dataArray;
+        String fill = "";
+        if ("".equals(dataLine)) {
+            dataArray = new String[]{""};
+        } else {
+            dataArray = dataLine.split("\\|");
+            fill = dataArray[0];
+        }
+        if (dataArray.length < steps) {
+            dataArray = new String[steps];
+            for (int i = 0; i < steps; i++) {
+                dataArray[i] = fill;
+            }
+        }
+        return dataArray;
+    }
+
+    private ArrayList<String> parseImages(Node node) {
+        ArrayList<String> images = new ArrayList<String>();
+        String image = XMLUtil.getAttribute(node, "image");
+        if (StringUtil.isOkString(image)) {
+            images.add(image);
+        } else {
+            NodeList imagesNode = ((Element) node).getElementsByTagName("images");
+            NodeList imagesXMLList = XMLUtil.getNodesByName(imagesNode.item(0), "image");
+            for (int i = 0; i < imagesXMLList.getLength(); i++) {
+                images.add(imagesXMLList.item(i).getTextContent());
+            }
+        }
+        return images;
+    }
+
+    private ArrayList<String> parseAdmins(Element element) throws Exception {
+        ArrayList<String> adminList = new ArrayList<String>();
+        String adminsLine = XMLUtil.getDataFromNode(element.getElementsByTagName("admins"));
+        if (!("".equals(adminsLine))) {
+            Collections.addAll(adminList, adminsLine.split(","));
+        }
+        return adminList;
+    }
+
     private void rebuildPanelTree() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("bor");
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(borConfig);
         for (Application application : borConfig.getApps()) {
-            DefaultMutableTreeNode appNode = new DefaultMutableTreeNode(application.getId());
+            DefaultMutableTreeNode appNode = new DefaultMutableTreeNode(application);
             for (Offer offer : application.getOffers()) {
-                appNode.add(new DefaultMutableTreeNode(offer.getId()));
+                appNode.add(new DefaultMutableTreeNode(offer));
             }
             root.add(appNode);
         }
         tree = new OffersTree(root);
-        GUI.getInstance().repaintTreePanel(tree);
+        GUI.getInstance().replaceTreePanel(tree);
     }
 
     private Serializer getDefaultSerializer() {
@@ -110,5 +314,79 @@ public class TreeManager {
 
     public boolean isActive(String appId, String offerId) {
         return borConfig.getAppByID(appId).getOfferByID(offerId).isActive();
+    }
+
+    public void moveOfferDown() {
+        TreePath path = tree.getSelectionPath();
+        if (path == null) {
+            GUI.getInstance().showAttentionMessageDialog("Select offer in the tree");
+        } else if (path.getPathCount() != 3) {
+            GUI.getInstance().showAttentionMessageDialog("Selected element is not offer");
+        } else {
+            String appId = path.getPathComponent(1).toString();
+            String offerId = path.getLastPathComponent().toString();
+            borConfig.moveOfferDown(appId, offerId);
+        }
+        rebuildPanelTree();
+    }
+
+    public void moveOfferUp() {
+        TreePath path = tree.getSelectionPath();
+        if (path == null) {
+            GUI.getInstance().showAttentionMessageDialog("Select offer in the tree");
+        } else if (path.getPathCount() != 3) {
+            GUI.getInstance().showAttentionMessageDialog("Selected element is not offer");
+        } else {
+            String appId = path.getPathComponent(1).toString();
+            String offerId = path.getLastPathComponent().toString();
+            borConfig.moveOfferUp(appId, offerId);
+        }
+        rebuildPanelTree();
+    }
+
+    public void startOffers() {
+        TreePath[] treePaths = tree.getSelectionPaths();
+        String newDate = DateUtil.getString(System.currentTimeMillis() + TimeUtil.WEEK_TO_MS);
+        for (TreePath treePath : treePaths) {
+            if (treePath.getPathCount() == 2) {
+                Application app = getAppFromTreePath(treePath);
+                for (Offer offer : app.getOffers()) {
+                    offer.setEndDate(newDate);
+                }
+            } else if (treePath.getPathCount() == 3) {
+                Offer offer = getOfferFromTreePath(treePath);
+                offer.setEndDate(newDate);
+            }
+        }
+        rebuildPanelTree();
+    }
+
+    public void stopOffers() {
+        TreePath[] treePaths = tree.getSelectionPaths();
+        String newDate = DateUtil.getString(System.currentTimeMillis() - TimeUtil.DAY_TO_MS);
+        for (TreePath treePath : treePaths) {
+            if (treePath.getPathCount() == 2) {
+                Application app = getAppFromTreePath(treePath);
+                for (Offer offer : app.getOffers()) {
+                    offer.setEndDate(newDate);
+                }
+            } else if (treePath.getPathCount() == 3) {
+                Offer offer = getOfferFromTreePath(treePath);
+                offer.setEndDate(newDate);
+            }
+        }
+        rebuildPanelTree();
+    }
+
+    private Application getAppFromTreePath(TreePath treePath) {
+        return (Application) getObjectFromTreePath(treePath);
+    }
+
+    private Offer getOfferFromTreePath(TreePath treePath) {
+        return (Offer) getObjectFromTreePath(treePath);
+    }
+
+    private Object getObjectFromTreePath(TreePath treePath) {
+        return ((DefaultMutableTreeNode) treePath.getLastPathComponent()).getUserObject();
     }
 }

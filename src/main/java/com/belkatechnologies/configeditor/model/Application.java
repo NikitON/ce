@@ -27,8 +27,24 @@ public class Application {
     private String defaultRewardType;
     @ElementList(entry = "word")
     private ArrayList<RewardWord> words;
+    @Element(required = false)
+    private String oldUsersTable;
     @ElementList
     private ArrayList<Offer> offers;
+
+    public Application() {
+    }
+
+    public Application(String id, String explicitRewards, String link, String defaultRewardValue, String defaultRewardType, ArrayList<RewardWord> words, String oldUsersTable, ArrayList<Offer> offers) {
+        this.id = id;
+        this.explicitRewards = explicitRewards.equals("") ? null : explicitRewards;
+        this.link = link.equals("") ? null : link;
+        this.defaultRewardValue = defaultRewardValue;
+        this.defaultRewardType = defaultRewardType;
+        this.words = words;
+        this.oldUsersTable = oldUsersTable.equals("") ? null : oldUsersTable;
+        this.offers = offers;
+    }
 
     public List<Offer> getOffers() {
         return offers;
@@ -57,6 +73,40 @@ public class Application {
     }
 
     public String getId() {
+        return id;
+    }
+
+    public void moveOfferUp(String offerId) {
+        int index = 0;
+        for (Offer offer : offers) {
+            if (offer.getId().equals(offerId)) {
+                index = offers.indexOf(offer);
+                break;
+            }
+        }
+        if (index != 0) {
+            Offer overLying = offers.get(index - 1);
+            offers.remove(index - 1);
+            offers.add(index, overLying);
+        }
+    }
+
+    public void moveOfferDown(String offerId) {
+        int index;
+        for (Offer offer : offers) {
+            if (offer.getId().equals(offerId)) {
+                index = offers.indexOf(offer);
+                if (index != offers.size() - 1) {
+                    offers.remove(index);
+                    offers.add(index + 1, offer);
+                }
+                break;
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
         return id;
     }
 }

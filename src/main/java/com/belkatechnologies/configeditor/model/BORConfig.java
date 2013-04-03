@@ -12,10 +12,18 @@ import java.util.ArrayList;
 
 @Root(name = "bor")
 public class BORConfig {
-    @ElementList(entry = "group")
+    @ElementList
     private ArrayList<EmailGroup> mailing;
     @ElementList
     private ArrayList<Application> apps;
+
+    public BORConfig() {
+    }
+
+    public BORConfig(ArrayList<EmailGroup> mailing, ArrayList<Application> apps) {
+        this.mailing = mailing;
+        this.apps = apps;
+    }
 
     public ArrayList<Application> getApps() {
         return apps;
@@ -28,5 +36,18 @@ public class BORConfig {
             }
         }
         return null;
+    }
+
+    public void moveOfferDown(String appId, String offerId) {
+        getAppByID(appId).moveOfferDown(offerId);
+    }
+
+    public void moveOfferUp(String appId, String offerId) {
+        getAppByID(appId).moveOfferUp(offerId);
+    }
+
+    @Override
+    public String toString() {
+        return "CONFIG";
     }
 }

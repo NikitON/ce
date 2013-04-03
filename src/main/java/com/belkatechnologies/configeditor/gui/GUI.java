@@ -11,7 +11,7 @@ import java.io.StringWriter;
  * Author: Nikita Khvorov
  * Date: 22.03.13
  */
-public class GUI {
+public class GUI implements ButtonsStateToggler {
     private static GUI instance = null;
 
     private final JFrame mainFrame;
@@ -19,13 +19,16 @@ public class GUI {
     private final TreePanel treePanel;
     private final UpperPanel upperPanel;
     private final StatusBar statusBar;
+    private final SelectPanel selectPanel;
 
     private GUI() {
         this.mainFrame = new ConfigEditor();
         this.treePanel = new TreePanel();
         this.upperPanel = new UpperPanel();
+        this.selectPanel = new SelectPanel();
         this.statusBar = new StatusBar();
         addComponentsToPane(mainFrame.getContentPane());
+        disableButtons();
         mainFrame.setVisible(true);
     }
 
@@ -50,17 +53,22 @@ public class GUI {
         showMessageDialog(title, message, JOptionPane.ERROR_MESSAGE);
     }
 
+    public void showAttentionMessageDialog(String message) {
+        showMessageDialog("Hey!", message, JOptionPane.INFORMATION_MESSAGE);
+    }
+
     public void showMessageDialog(String title, String message, int type) {
         JOptionPane.showMessageDialog(mainFrame, message, title, type);
     }
 
     private void addComponentsToPane(Container contentPane) {
         contentPane.add(treePanel, BorderLayout.LINE_START);
+        contentPane.add(selectPanel, BorderLayout.LINE_END);
         contentPane.add(upperPanel, BorderLayout.PAGE_START);
         contentPane.add(statusBar, BorderLayout.PAGE_END);
     }
 
-    public void repaintTreePanel(JTree tree) {
+    public void replaceTreePanel(JTree tree) {
         treePanel.replaceScrollPane(tree);
         treePanel.repaint();
         treePanel.revalidate();
@@ -75,5 +83,23 @@ public class GUI {
         statusBar.removeProgressBar();
         statusBar.repaint();
         statusBar.revalidate();
+    }
+
+    @Override
+    public void disableButtons() {
+        upperPanel.disableButtons();
+        treePanel.disableButtons();
+    }
+
+    @Override
+    public void enableButtons() {
+        upperPanel.enableButtons();
+        treePanel.enableButtons();
+    }
+
+    @Override
+    public void toggleButtons() {
+        upperPanel.toggleButtons();
+        treePanel.toggleButtons();
     }
 }

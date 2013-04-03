@@ -1,4 +1,4 @@
-package com.belkatechnologies.configeditor.listners.topbuttons;
+package com.belkatechnologies.configeditor.listeners.topbuttons;
 
 import com.belkatechnologies.configeditor.gui.GUI;
 import com.belkatechnologies.configeditor.managers.TreeManager;
@@ -43,6 +43,7 @@ public class OpenXMLListener extends IOXMLListener {
         try {
             TreeManager.getInstance().setOpenedFile(file);
             deserializeXML(new FileInputStream(file));
+            GUI.getInstance().enableButtons();
         } catch (FileNotFoundException e) {
             notifyWithExceptionMessage(e);
         } finally {

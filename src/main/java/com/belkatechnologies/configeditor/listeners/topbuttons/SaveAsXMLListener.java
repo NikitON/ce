@@ -1,4 +1,4 @@
-package com.belkatechnologies.configeditor.listners.topbuttons;
+package com.belkatechnologies.configeditor.listeners.topbuttons;
 
 import com.belkatechnologies.configeditor.gui.GUI;
 import com.belkatechnologies.configeditor.managers.TreeManager;

@@ -21,6 +21,17 @@ public class OfferStep {
     @Element(required = false, name = "type")
     private String rewardType;
 
+    public OfferStep() {
+    }
+
+    public OfferStep(String level, String description, String rewardText, String rewardValue, String rewardType) {
+        this.level = level;
+        this.description = description.equals("") ? null : description;
+        this.rewardText = rewardText.equals("") ? null : rewardText;
+        this.rewardValue = rewardValue.equals("") ? null : rewardValue;
+        this.rewardType = rewardType.equals("") ? null : rewardType;
+    }
+
     public String getRewardValue() {
         return rewardValue;
     }

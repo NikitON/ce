@@ -1,4 +1,4 @@
-package com.belkatechnologies.configeditor.listners.topbuttons;
+package com.belkatechnologies.configeditor.listeners.topbuttons;
 
 import com.belkatechnologies.configeditor.gui.GUI;
 
@@ -28,6 +28,7 @@ public class DownloadXMLListener extends OpenXMLListener {
                     URL url = new URL(xmlURL);
                     URLConnection connection = url.openConnection();
                     deserializeXML(connection.getInputStream());
+                    GUI.getInstance().enableButtons();
                 } catch (IOException e1) {
                     GUI.getInstance().showErrorMessageDialog("Connection failed", "Try again.");
                 } finally {

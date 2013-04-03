@@ -30,13 +30,11 @@ public class OffersTreeCellRenderer extends DefaultTreeCellRenderer {
                     setBorderSelectionColor(ACTIVE_COLOR_BORDER);
                     return this;
                 }
-            } else {
-                if (TreeManager.getInstance().isActive(node.toString())) {
-                    setBackgroundNonSelectionColor(ACTIVE_COLOR_NON_SELECTION);
-                    setBackgroundSelectionColor(ACTIVE_COLOR);
-                    setBorderSelectionColor(ACTIVE_COLOR_BORDER);
-                    return this;
-                }
+            } else if (TreeManager.getInstance().isActive(node.toString())) {
+                setBackgroundNonSelectionColor(ACTIVE_COLOR_NON_SELECTION);
+                setBackgroundSelectionColor(ACTIVE_COLOR);
+                setBorderSelectionColor(ACTIVE_COLOR_BORDER);
+                return this;
             }
         }
         return defaultTreeCellRenderer.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);    //To change body of overridden methods use File | Settings | File Templates.

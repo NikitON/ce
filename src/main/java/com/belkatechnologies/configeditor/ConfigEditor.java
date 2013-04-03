@@ -12,7 +12,7 @@ import java.awt.*;
 public class ConfigEditor extends JFrame {
     public ConfigEditor() {
         setTitle("Config Editor");
-        setMinimumSize(new Dimension(900, 200));
+        setMinimumSize(new Dimension(950, 400));
         setExtendedState(Frame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

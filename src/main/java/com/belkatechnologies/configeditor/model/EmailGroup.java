@@ -17,4 +17,12 @@ public class EmailGroup {
     private String id;
     @ElementList(entry = "email")
     private ArrayList<String> emails;
+
+    public EmailGroup() {
+    }
+
+    public EmailGroup(String id, ArrayList<String> emails) {
+        this.id = id;
+        this.emails = emails;
+    }
 }
