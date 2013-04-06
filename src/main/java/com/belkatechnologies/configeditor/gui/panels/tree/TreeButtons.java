@@ -1,9 +1,7 @@
-package com.belkatechnologies.configeditor.gui;
+package com.belkatechnologies.configeditor.gui.panels.tree;
 
-import com.belkatechnologies.configeditor.listeners.treebuttons.OfferDownListener;
-import com.belkatechnologies.configeditor.listeners.treebuttons.OfferStartListener;
-import com.belkatechnologies.configeditor.listeners.treebuttons.OfferStopListener;
-import com.belkatechnologies.configeditor.listeners.treebuttons.OfferUpListener;
+import com.belkatechnologies.configeditor.gui.panels.ButtonsPanel;
+import com.belkatechnologies.configeditor.listeners.tree.buttons.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,16 +12,14 @@ import java.util.ArrayList;
  * Author: Nikita Khvorov
  * Date: 02.04.13
  */
-public class TreeButtons extends JPanel implements ButtonsStateToggler {
-    private java.util.List<JButton> buttons;
-
+public class TreeButtons extends ButtonsPanel {
     public TreeButtons() {
         setPreferredSize(new Dimension(55, 500));
         setLayout(new BorderLayout());
         JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setPreferredSize(new Dimension(55, 215));
+        buttonsPanel.setPreferredSize(new Dimension(55, 255));
         buttonsPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        buttonsPanel.setLayout(new GridLayout(4, 1, 5, 5));
+        buttonsPanel.setLayout(new GridLayout(5, 1, 5, 5));
         addButtons(buttonsPanel);
         add(buttonsPanel, BorderLayout.PAGE_START);
         add(new JPanel(), BorderLayout.CENTER);
@@ -35,6 +31,7 @@ public class TreeButtons extends JPanel implements ButtonsStateToggler {
         addButton(buttonsPanel, "/images/down.png", new OfferDownListener());
         addButton(buttonsPanel, "/images/start.png", new OfferStartListener());
         addButton(buttonsPanel, "/images/stop.png", new OfferStopListener());
+        addButton(buttonsPanel, "/images/delete.png", new OfferDeleteListener());
     }
 
     private void addButton(JPanel panel, String image, ActionListener listener) {
@@ -43,32 +40,5 @@ public class TreeButtons extends JPanel implements ButtonsStateToggler {
         button.addActionListener(listener);
         panel.add(button);
         buttons.add(button);
-    }
-
-    @Override
-    public void toggleButtons() {
-        if (buttons.get(0).isEnabled()) {
-            for (JButton button : buttons) {
-                button.setEnabled(false);
-            }
-        } else {
-            for (JButton button : buttons) {
-                button.setEnabled(true);
-            }
-        }
-    }
-
-    @Override
-    public void enableButtons() {
-        for (JButton button : buttons) {
-            button.setEnabled(true);
-        }
-    }
-
-    @Override
-    public void disableButtons() {
-        for (JButton button : buttons) {
-            button.setEnabled(false);
-        }
     }
 }

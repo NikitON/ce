@@ -1,4 +1,6 @@
-package com.belkatechnologies.configeditor.gui;
+package com.belkatechnologies.configeditor.gui.panels;
+
+import com.belkatechnologies.configeditor.gui.Colors;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,8 +16,7 @@ public class StatusBar extends JPanel {
     public StatusBar() {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(20, 30));
-        setBackground(new Color(0xF5F5F5));
-        setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, new Color(0x184686)));
+        setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, Colors.BORDER));
         messageLabel = new JLabel("");
     }
 

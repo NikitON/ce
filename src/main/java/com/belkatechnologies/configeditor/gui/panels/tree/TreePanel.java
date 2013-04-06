@@ -1,4 +1,7 @@
-package com.belkatechnologies.configeditor.gui;
+package com.belkatechnologies.configeditor.gui.panels.tree;
+
+import com.belkatechnologies.configeditor.gui.ButtonsStateToggler;
+import com.belkatechnologies.configeditor.gui.Colors;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +17,7 @@ public class TreePanel extends JPanel implements ButtonsStateToggler {
     public TreePanel() {
         setPreferredSize(new Dimension(350, 500));
         setLayout(new BorderLayout());
-        setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, new Color(0x184686)));
+        setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, Colors.BORDER));
         scrollPane = new JScrollPane();
         scrollPane.setBorder(TreeBorderFactory.getBorder());
         add(scrollPane, BorderLayout.CENTER);

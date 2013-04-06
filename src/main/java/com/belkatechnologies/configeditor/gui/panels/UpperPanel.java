@@ -1,5 +1,7 @@
-package com.belkatechnologies.configeditor.gui;
+package com.belkatechnologies.configeditor.gui.panels;
 
+import com.belkatechnologies.configeditor.gui.ButtonsStateToggler;
+import com.belkatechnologies.configeditor.gui.Colors;
 import com.belkatechnologies.configeditor.listeners.topbuttons.*;
 
 import javax.swing.*;
@@ -20,8 +22,8 @@ public class UpperPanel extends JPanel implements ButtonsStateToggler {
         addOpenButtons();
         addSeparator();
         addSaveButtons();
-        setBackground(new Color(0x9BBCE9));
-        setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(0x184686)));
+        setBackground(Colors.DARK_BACK);
+        setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Colors.BORDER));
     }
 
     private void addOpenButtons() {

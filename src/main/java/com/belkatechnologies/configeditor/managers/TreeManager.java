@@ -1,7 +1,7 @@
 package com.belkatechnologies.configeditor.managers;
 
 import com.belkatechnologies.configeditor.gui.GUI;
-import com.belkatechnologies.configeditor.gui.OffersTree;
+import com.belkatechnologies.configeditor.gui.panels.tree.OffersTree;
 import com.belkatechnologies.configeditor.model.*;
 import com.belkatechnologies.utils.DateUtil;
 import com.belkatechnologies.utils.StringUtil;
@@ -313,19 +313,24 @@ public class TreeManager {
     }
 
     public boolean isActive(String appId, String offerId) {
-        return borConfig.getAppByID(appId).getOfferByID(offerId).isActive();
+        try {
+            return borConfig.getAppByID(appId).getOfferByID(offerId).isActive();
+        } catch (NullPointerException e) {
+            return false;
+        }
     }
 
     public void moveOfferDown() {
         TreePath path = tree.getSelectionPath();
         if (path == null) {
             GUI.getInstance().showAttentionMessageDialog("Select offer in the tree");
-        } else if (path.getPathCount() != 3) {
-            GUI.getInstance().showAttentionMessageDialog("Selected element is not offer");
-        } else {
-            String appId = path.getPathComponent(1).toString();
-            String offerId = path.getLastPathComponent().toString();
-            borConfig.moveOfferDown(appId, offerId);
+        } else if (path.getPathCount() == 2) {
+            Application app = getAppFromTreePath(path);
+            borConfig.moveAppDown(app);
+        } else if (path.getPathCount() == 3) {
+            Application app = getAppFromTreePath(path.getParentPath());
+            Offer offer = getOfferFromTreePath(path);
+            app.moveOfferDown(offer);
         }
         rebuildPanelTree();
     }
@@ -334,18 +339,23 @@ public class TreeManager {
         TreePath path = tree.getSelectionPath();
         if (path == null) {
             GUI.getInstance().showAttentionMessageDialog("Select offer in the tree");
-        } else if (path.getPathCount() != 3) {
-            GUI.getInstance().showAttentionMessageDialog("Selected element is not offer");
-        } else {
-            String appId = path.getPathComponent(1).toString();
-            String offerId = path.getLastPathComponent().toString();
-            borConfig.moveOfferUp(appId, offerId);
+        } else if (path.getPathCount() == 2) {
+            Application app = getAppFromTreePath(path);
+            borConfig.moveAppUp(app);
+        } else if (path.getPathCount() == 3) {
+            Application app = getAppFromTreePath(path.getParentPath());
+            Offer offer = getOfferFromTreePath(path);
+            app.moveOfferUp(offer);
         }
         rebuildPanelTree();
     }
 
     public void startOffers() {
         TreePath[] treePaths = tree.getSelectionPaths();
+        if (treePaths == null) {
+            GUI.getInstance().showErrorMessageDialog("ERROR", "Nothing is selected");
+            return;
+        }
         String newDate = DateUtil.getString(System.currentTimeMillis() + TimeUtil.WEEK_TO_MS);
         for (TreePath treePath : treePaths) {
             if (treePath.getPathCount() == 2) {
@@ -363,6 +373,10 @@ public class TreeManager {
 
     public void stopOffers() {
         TreePath[] treePaths = tree.getSelectionPaths();
+        if (treePaths == null) {
+            GUI.getInstance().showErrorMessageDialog("ERROR", "Nothing is selected");
+            return;
+        }
         String newDate = DateUtil.getString(System.currentTimeMillis() - TimeUtil.DAY_TO_MS);
         for (TreePath treePath : treePaths) {
             if (treePath.getPathCount() == 2) {
@@ -373,6 +387,25 @@ public class TreeManager {
             } else if (treePath.getPathCount() == 3) {
                 Offer offer = getOfferFromTreePath(treePath);
                 offer.setEndDate(newDate);
+            }
+        }
+        rebuildPanelTree();
+    }
+
+    public void deleteOffers() {
+        TreePath[] treePaths = tree.getSelectionPaths();
+        if (treePaths == null) {
+            GUI.getInstance().showErrorMessageDialog("ERROR", "Nothing is selected");
+            return;
+        }
+        for (TreePath treePath : treePaths) {
+            if (treePath.getPathCount() == 2) {
+                Application app = getAppFromTreePath(treePath);
+                borConfig.getApps().remove(app);
+            } else if (treePath.getPathCount() == 3) {
+                Application app = getAppFromTreePath(treePath.getParentPath());
+                Offer offer = getOfferFromTreePath(treePath);
+                app.getOffers().remove(offer);
             }
         }
         rebuildPanelTree();

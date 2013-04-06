@@ -1,6 +1,11 @@
 package com.belkatechnologies.configeditor.gui;
 
 import com.belkatechnologies.configeditor.ConfigEditor;
+import com.belkatechnologies.configeditor.gui.panels.SelectPanel;
+import com.belkatechnologies.configeditor.gui.panels.StatusBar;
+import com.belkatechnologies.configeditor.gui.panels.UpperPanel;
+import com.belkatechnologies.configeditor.gui.panels.tree.TreePanel;
+import com.belkatechnologies.configeditor.gui.panels.workbench.WorkbenchPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +25,7 @@ public class GUI implements ButtonsStateToggler {
     private final UpperPanel upperPanel;
     private final StatusBar statusBar;
     private final SelectPanel selectPanel;
+    private final WorkbenchPanel workbenchPanel;
 
     private GUI() {
         this.mainFrame = new ConfigEditor();
@@ -27,6 +33,7 @@ public class GUI implements ButtonsStateToggler {
         this.upperPanel = new UpperPanel();
         this.selectPanel = new SelectPanel();
         this.statusBar = new StatusBar();
+        this.workbenchPanel = new WorkbenchPanel();
         addComponentsToPane(mainFrame.getContentPane());
         disableButtons();
         mainFrame.setVisible(true);
@@ -66,6 +73,7 @@ public class GUI implements ButtonsStateToggler {
         contentPane.add(selectPanel, BorderLayout.LINE_END);
         contentPane.add(upperPanel, BorderLayout.PAGE_START);
         contentPane.add(statusBar, BorderLayout.PAGE_END);
+        contentPane.add(workbenchPanel, BorderLayout.CENTER);
     }
 
     public void replaceTreePanel(JTree tree) {
@@ -89,17 +97,28 @@ public class GUI implements ButtonsStateToggler {
     public void disableButtons() {
         upperPanel.disableButtons();
         treePanel.disableButtons();
+        workbenchPanel.disableButtons();
     }
 
     @Override
     public void enableButtons() {
         upperPanel.enableButtons();
         treePanel.enableButtons();
+        workbenchPanel.enableButtons();
     }
 
     @Override
     public void toggleButtons() {
         upperPanel.toggleButtons();
         treePanel.toggleButtons();
+        workbenchPanel.toggleButtons();
+    }
+
+    public void showAddAppView() {
+        workbenchPanel.showAddAppView();
+    }
+
+    public void showAddOfferView() {
+        workbenchPanel.showAddOfferView();
     }
 }

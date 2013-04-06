@@ -76,14 +76,8 @@ public class Application {
         return id;
     }
 
-    public void moveOfferUp(String offerId) {
-        int index = 0;
-        for (Offer offer : offers) {
-            if (offer.getId().equals(offerId)) {
-                index = offers.indexOf(offer);
-                break;
-            }
-        }
+    public void moveOfferUp(Offer offer) {
+        int index = offers.indexOf(offer);
         if (index != 0) {
             Offer overLying = offers.get(index - 1);
             offers.remove(index - 1);
@@ -91,17 +85,11 @@ public class Application {
         }
     }
 
-    public void moveOfferDown(String offerId) {
-        int index;
-        for (Offer offer : offers) {
-            if (offer.getId().equals(offerId)) {
-                index = offers.indexOf(offer);
-                if (index != offers.size() - 1) {
-                    offers.remove(index);
-                    offers.add(index + 1, offer);
-                }
-                break;
-            }
+    public void moveOfferDown(Offer offer) {
+        int index = offers.indexOf(offer);
+        if (index != offers.size() - 1) {
+            offers.remove(index);
+            offers.add(index + 1, offer);
         }
     }
 

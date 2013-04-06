@@ -38,16 +38,25 @@ public class BORConfig {
         return null;
     }
 
-    public void moveOfferDown(String appId, String offerId) {
-        getAppByID(appId).moveOfferDown(offerId);
-    }
-
-    public void moveOfferUp(String appId, String offerId) {
-        getAppByID(appId).moveOfferUp(offerId);
-    }
-
     @Override
     public String toString() {
         return "CONFIG";
+    }
+
+    public void moveAppDown(Application app) {
+        int index = apps.indexOf(app);
+        if (index != apps.size() - 1) {
+            apps.remove(index);
+            apps.add(index + 1, app);
+        }
+    }
+
+    public void moveAppUp(Application app) {
+        int index = apps.indexOf(app);
+        if (index != 0) {
+            Application overLying = apps.get(index - 1);
+            apps.remove(index - 1);
+            apps.add(index, overLying);
+        }
     }
 }
