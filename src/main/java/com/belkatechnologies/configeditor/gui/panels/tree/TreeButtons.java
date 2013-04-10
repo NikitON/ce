@@ -26,7 +26,7 @@ public class TreeButtons extends ButtonsPanel {
     }
 
     private void addButtons(JPanel buttonsPanel) {
-        buttons = new ArrayList<JButton>();
+        buttons = new ArrayList<>();
         addButton(buttonsPanel, "/images/up.png", new OfferUpListener());
         addButton(buttonsPanel, "/images/down.png", new OfferDownListener());
         addButton(buttonsPanel, "/images/start.png", new OfferStartListener());

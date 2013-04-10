@@ -39,4 +39,9 @@ public class OfferStep {
     public void setRewardValue(String rewardValue) {
         this.rewardValue = rewardValue;
     }
+
+    @Override
+    public String toString() {
+        return level;
+    }
 }

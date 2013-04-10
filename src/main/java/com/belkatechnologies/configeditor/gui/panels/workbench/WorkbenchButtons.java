@@ -30,7 +30,7 @@ public class WorkbenchButtons extends ButtonsPanel {
     }
 
     private void addButtons(JPanel buttonsPanel) {
-        buttons = new ArrayList<JButton>();
+        buttons = new ArrayList<>();
         addButton(buttonsPanel, "   App", "/images/add.png", new AddAppListener());
         addButton(buttonsPanel, "   Offer", "/images/add.png", new AddOfferListener());
     }

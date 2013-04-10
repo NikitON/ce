@@ -28,4 +28,9 @@ public class RewardWord {
         this.form2 = form2;
         this.form3 = form3;
     }
+
+    @Override
+    public String toString() {
+        return id;
+    }
 }

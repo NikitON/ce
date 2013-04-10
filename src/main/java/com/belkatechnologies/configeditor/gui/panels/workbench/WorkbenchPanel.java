@@ -21,7 +21,8 @@ public class WorkbenchPanel extends JPanel implements ButtonsStateToggler {
 
     public WorkbenchPanel() {
         setLayout(new BorderLayout());
-        scrollPane = new JScrollPane();
+        mainPanel = new JPanel();
+        scrollPane = new JScrollPane(mainPanel);
         scrollPane.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Colors.BORDER));
         add(scrollPane, BorderLayout.CENTER);
         buttonsPanel = new WorkbenchButtons();
