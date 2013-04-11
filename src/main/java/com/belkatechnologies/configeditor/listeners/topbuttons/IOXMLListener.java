@@ -11,7 +11,7 @@ import java.io.File;
  * Date: 14.03.13
  */
 public abstract class IOXMLListener implements ActionListener {
-    protected static final File CURRENT_DIRECTORY = new File("d:\\Work\\belkaDoc\\temp");
+    protected static final File CURRENT_DIRECTORY = new File("d:\\work\\belkaDocs\\temp");
 
     protected static final String STAGING_SERVER = "109.234.154.82";
     protected static final String STAGING_PATH = "bor/config_test.xml";

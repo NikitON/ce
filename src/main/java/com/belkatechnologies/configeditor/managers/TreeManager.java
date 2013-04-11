@@ -109,14 +109,14 @@ public class TreeManager {
     }
 
     private ArrayList<EmailGroup> parseEmails(Document doc) {
-        ArrayList<EmailGroup> emails = new ArrayList<EmailGroup>();
+        ArrayList<EmailGroup> emails = new ArrayList<>();
         NodeList emailsNode = doc.getElementsByTagName("emails");
         if (emailsNode != null && emailsNode.getLength() != 0) {
             NodeList groupXMLList = XMLUtil.getNodesByName(emailsNode.item(0), "group");
             for (int i = 0; i < groupXMLList.getLength(); i++) {
                 String groupName = XMLUtil.getAttribute(groupXMLList.item(i), "id");
                 NodeList emailXMLList = XMLUtil.getNodesByName(groupXMLList.item(i), "email");
-                ArrayList<String> groupEmails = new ArrayList<String>();
+                ArrayList<String> groupEmails = new ArrayList<>();
                 for (int j = 0; j < emailXMLList.getLength(); j++) {
                     groupEmails.add(emailXMLList.item(j).getTextContent());
                 }
@@ -127,7 +127,7 @@ public class TreeManager {
     }
 
     private ArrayList<Application> parseApps(Document doc) throws Exception {
-        ArrayList<Application> apps = new ArrayList<Application>();
+        ArrayList<Application> apps = new ArrayList<>();
         NodeList appList = doc.getElementsByTagName("app");
         for (int j = 0; j < appList.getLength(); j++) {
             Node appNode = appList.item(j);
@@ -147,7 +147,7 @@ public class TreeManager {
     }
 
     private ArrayList<RewardWord> parseWords(Node wordsNode) throws Exception {
-        ArrayList<RewardWord> rewardWords = new ArrayList<RewardWord>();
+        ArrayList<RewardWord> rewardWords = new ArrayList<>();
         NodeList wordsList = ((Element) wordsNode).getElementsByTagName("word");
         for (int i = 0; i < wordsList.getLength(); i++) {
             Element word = (Element) wordsList.item(i);
@@ -163,7 +163,7 @@ public class TreeManager {
     private ArrayList<Offer> parseOffers(Element appNode) throws Exception {
         NodeList offersNode = appNode.getElementsByTagName("offers");
         NodeList offerXMLList = XMLUtil.getNodesByName(offersNode.item(0), "offer");
-        ArrayList<Offer> offerList = new ArrayList<Offer>();
+        ArrayList<Offer> offerList = new ArrayList<>();
         for (int i = 0; i < offerXMLList.getLength(); i++) {
             Node node = offerXMLList.item(i);
             String id = XMLUtil.getAttribute(node, "id");
@@ -225,7 +225,7 @@ public class TreeManager {
     }
 
     private ArrayList<OfferStep> parseSteps(Node node) throws Exception {
-        ArrayList<OfferStep> steps = new ArrayList<OfferStep>();
+        ArrayList<OfferStep> steps = new ArrayList<>();
         String[] levels = XMLUtil.getAttribute(node, "level").split("\\|");
         int stepCount = levels.length;
         String[] rewardValues = getDataArray(XMLUtil.getAttribute(node, "rewardValue"), stepCount);
@@ -268,7 +268,7 @@ public class TreeManager {
     }
 
     private ArrayList<String> parseImages(Node node) {
-        ArrayList<String> images = new ArrayList<String>();
+        ArrayList<String> images = new ArrayList<>();
         String image = XMLUtil.getAttribute(node, "image");
         if (StringUtil.isOkString(image)) {
             images.add(image);
@@ -283,7 +283,7 @@ public class TreeManager {
     }
 
     private ArrayList<String> parseAdmins(Element element) throws Exception {
-        ArrayList<String> adminList = new ArrayList<String>();
+        ArrayList<String> adminList = new ArrayList<>();
         String adminsLine = XMLUtil.getDataFromNode(element.getElementsByTagName("admins"));
         if (!("".equals(adminsLine))) {
             Collections.addAll(adminList, adminsLine.split(","));
@@ -421,5 +421,13 @@ public class TreeManager {
 
     private Object getObjectFromTreePath(TreePath treePath) {
         return ((DefaultMutableTreeNode) treePath.getLastPathComponent()).getUserObject();
+    }
+
+    public boolean contains(String appId) {
+        return borConfig.contains(appId);
+    }
+
+    public boolean contains(String appId, String offerId) {
+        return false;
     }
 }

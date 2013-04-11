@@ -4,6 +4,7 @@ import com.belkatechnologies.configeditor.listeners.workbench.AddListener;
 import com.belkatechnologies.configeditor.listeners.workbench.RemoveListener;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -22,7 +23,7 @@ public abstract class InputPanel extends JPanel {
     protected Map<String, List<?>> listsMap;
     protected List<String> ignored;
     protected List<String> complex;
-    protected Map<String, JTextField> inputs;
+    protected Map<String, JTextComponent> inputs;
     protected JButton saveButton;
 
     protected InputPanel() {
@@ -106,6 +107,10 @@ public abstract class InputPanel extends JPanel {
 
     public List getList(String name) {
         return listsMap.get(name);
+    }
+
+    public String getParam(String name) {
+        return inputs.get(name).getText();
     }
 
     protected String listToString(List<?> list) {

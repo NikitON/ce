@@ -13,8 +13,6 @@ import java.awt.*;
  * Date: 04.04.13
  */
 public class WorkbenchPanel extends JPanel implements ButtonsStateToggler {
-    private java.util.List<JButton> buttons;
-
     private JPanel mainPanel;
     private JScrollPane scrollPane;
     private WorkbenchButtons buttonsPanel;

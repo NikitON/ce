@@ -59,4 +59,8 @@ public class BORConfig {
             apps.add(index, overLying);
         }
     }
+
+    public boolean contains(String appId) {
+        return getAppByID(appId) != null;
+    }
 }

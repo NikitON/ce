@@ -1,5 +1,7 @@
 package com.belkatechnologies.configeditor.model;
 
+import com.belkatechnologies.configeditor.checkers.InputChecker;
+import com.belkatechnologies.configeditor.checkers.app.IDChecker;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
@@ -31,6 +33,18 @@ public class Application {
     private String oldUsersTable;
     @ElementList
     private ArrayList<Offer> offers;
+
+    private static final List<Class<? extends InputChecker>> CHECKERS = initCheckers();
+
+    private static List<Class<? extends InputChecker>> initCheckers() {
+        List<Class<? extends InputChecker>> checkers = new ArrayList<>();
+        checkers.add(IDChecker.class);
+        return checkers;
+    }
+
+    public static List<Class<? extends InputChecker>> getCheckers() {
+        return CHECKERS;
+    }
 
     public Application() {
     }
