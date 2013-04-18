@@ -21,6 +21,22 @@ public class OfferInputPanel extends InputPanel {
     private Targeting targeting;
     private Checker checker;
 
+    public OfferInputPanel(Object object) {
+        super(object);
+        Offer offer = (Offer) edited;
+        this.targeting = offer.getTargeting();
+        this.checker = offer.getChecker();
+    }
+
+    @Override
+    protected void fillInputs() {
+        Offer offer = (Offer) edited;
+        comboInputs.get("appId").setSelectedItem(TreeManager.getInstance().getAppByOffer(offer));
+        comboInputs.get("appId").setEnabled(false);
+        Field[] fields = Offer.class.getDeclaredFields();
+        fillInputs(offer, fields);
+    }
+
     @Override
     protected void initLists() {
         listsMap.put("admins", new ArrayList<>());
@@ -32,8 +48,8 @@ public class OfferInputPanel extends InputPanel {
     }
 
     @Override
-    protected void initSaveButtonListener() {
-        saveButton.addActionListener(new SaveOfferListener(this));
+    protected void initSaveButtonListener(boolean replace) {
+        saveButton.addActionListener(new SaveOfferListener(this, replace));
     }
 
     @Override

@@ -9,11 +9,21 @@ import com.belkatechnologies.configeditor.managers.TreeManager;
  * Date: 15.04.13
  */
 public class IDChecker extends InputChecker {
+    private boolean checkExistence;
+
+    public IDChecker() {
+        this.checkExistence = true;
+    }
+
+    public IDChecker(boolean checkExistence) {
+        this.checkExistence = checkExistence;
+    }
+
     @Override
     public void check(InputPanel inputPanel, StringBuilder sb) {
         String id = inputPanel.getParam("id");
         String appId = inputPanel.getComboParam("appId");
-        if (!checkEmpty(id, "ID", sb)) {
+        if (!checkEmpty(id, "ID", sb) && checkExistence) {
             checkExistence(appId, id, sb);
         }
     }

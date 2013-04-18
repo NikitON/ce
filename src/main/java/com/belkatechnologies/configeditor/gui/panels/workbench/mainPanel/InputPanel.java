@@ -2,11 +2,13 @@ package com.belkatechnologies.configeditor.gui.panels.workbench.mainPanel;
 
 import com.belkatechnologies.configeditor.listeners.workbench.AddListener;
 import com.belkatechnologies.configeditor.listeners.workbench.RemoveListener;
+import org.apache.commons.beanutils.PropertyUtils;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +28,7 @@ public abstract class InputPanel extends JPanel {
     protected Map<String, JTextComponent> inputs;
     protected Map<String, JComboBox> comboInputs;
     protected JButton saveButton;
+    protected Object edited;
 
     protected InputPanel() {
         this.inputCount = new AtomicInteger(0);
@@ -39,13 +42,25 @@ public abstract class InputPanel extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         initLists();
         add(getInputsPanel());
-        initSaveButtonListener();
         add(saveButton);
     }
 
+    protected InputPanel(Object object) {
+        this();
+        if (object != null) {
+            this.edited = object;
+            fillInputs();
+            initSaveButtonListener(true);
+        } else {
+            initSaveButtonListener(false);
+        }
+    }
+
+    protected abstract void fillInputs();
+
     protected abstract void initLists();
 
-    protected abstract void initSaveButtonListener();
+    protected abstract void initSaveButtonListener(boolean replace);
 
     protected abstract JPanel getInputsPanel();
 
@@ -63,6 +78,24 @@ public abstract class InputPanel extends JPanel {
                     addSpecialInput(inputsPanel, fieldName);
                 } else {
                     addSimpleInput(inputsPanel, fieldName);
+                }
+            }
+        }
+    }
+
+    protected void fillInputs(Object object, Field[] fields) {
+        for (Field field : fields) {
+            String fieldName = field.getName();
+            if (!ignored.contains(fieldName)) {
+                try {
+                    if (listsMap.containsKey(fieldName)) {
+                        List list = (List) PropertyUtils.getProperty(object, fieldName);
+                        inputs.get(fieldName).setText(listToString(list));
+                        listsMap.put(fieldName, list);
+                    } else if (!complex.contains(fieldName)) {
+                        inputs.get(fieldName).setText((String) PropertyUtils.getProperty(object, fieldName));
+                    }
+                } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException ignored) {
                 }
             }
         }
@@ -120,7 +153,7 @@ public abstract class InputPanel extends JPanel {
     }
 
     public String getComboParam(String name) {
-        return inputs.get(name).getSelectedText();
+        return comboInputs.get(name).getSelectedItem().toString();
     }
 
     public abstract Object getObject(String name);
@@ -130,5 +163,9 @@ public abstract class InputPanel extends JPanel {
             return "";
         }
         return list.toString();
+    }
+
+    public Object getEdited() {
+        return edited;
     }
 }

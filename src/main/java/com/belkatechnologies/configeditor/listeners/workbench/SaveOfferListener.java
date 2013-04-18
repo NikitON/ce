@@ -1,6 +1,7 @@
 package com.belkatechnologies.configeditor.listeners.workbench;
 
 import com.belkatechnologies.configeditor.checkers.InputChecker;
+import com.belkatechnologies.configeditor.checkers.offer.IDChecker;
 import com.belkatechnologies.configeditor.gui.GUI;
 import com.belkatechnologies.configeditor.gui.panels.workbench.mainPanel.InputPanel;
 import com.belkatechnologies.configeditor.managers.TreeManager;
@@ -21,34 +22,61 @@ import java.util.List;
  */
 public class SaveOfferListener implements ActionListener {
     private InputPanel inputPanel;
+    private boolean replace;
 
-    public SaveOfferListener(InputPanel inputPanel) {
+    public SaveOfferListener(InputPanel inputPanel, boolean replace) {
         this.inputPanel = inputPanel;
+        this.replace = replace;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         StringBuilder sb = new StringBuilder();
-        for (Class<? extends InputChecker> clazz : Offer.getCheckers()) {
-            try {
-                InputChecker checker = clazz.newInstance();
-                checker.check(inputPanel, sb);
-            } catch (InstantiationException | IllegalAccessException ignored) {
-            }
-        }
+        checkAll(sb);
         if (StringUtil.isOkString(sb.toString())) {
             GUI.getInstance().showErrorMessageDialog("Creation error", sb.toString());
         } else {
-            String app = inputPanel.getComboParam("appId");
-            Offer offer = new Offer(getParam("id"), getParam("incrementLevel"), getParam("incrementLevelDateOffset"),
-                    getParam("minLevel"), getParam("newOnly"), getParam("targetURL"), getParam("targetURLFormat"),
-                    getParam("referralURL"), (ArrayList<String>) getList("images"), getParam("title"),
-                    getParam("price"), getParam("shortDescriptions"), getParam("description"), getParam("rewardText"),
-                    (ArrayList<OfferStep>) getList("steps"), (Targeting) getObject("targeting"),
-                    (Checker) getObject("checker"), (ArrayList<String>) getList("admins"), getParam("showLimit"),
-                    getParam("clickLimit"), getParam("startDate"), getParam("endDate"), getParam("length"),
-                    getParam("sleepTime"), getParam("extraParams"), getParam("gameSlogan"));
-            TreeManager.getInstance().insertOffer(app, offer);
+            if (replace) {
+                replaceOffer();
+            } else {
+                insertOffer();
+            }
+        }
+    }
+
+    private void insertOffer() {
+        Offer offer = createOfferFromInputPanel();
+        String app = inputPanel.getComboParam("appId");
+        TreeManager.getInstance().insertOffer(app, offer);
+    }
+
+    private void replaceOffer() {
+        Offer offer = createOfferFromInputPanel();
+        TreeManager.getInstance().replaceOffer((Offer) inputPanel.getEdited(), offer);
+    }
+
+    private Offer createOfferFromInputPanel() {
+        return new Offer(getParam("id"), getParam("incrementLevel"), getParam("incrementLevelDateOffset"),
+                getParam("minLevel"), getParam("newOnly"), getParam("targetURL"), getParam("targetURLFormat"),
+                getParam("referralURL"), (ArrayList<String>) getList("images"), getParam("title"),
+                getParam("price"), getParam("shortDescriptions"), getParam("description"), getParam("rewardText"),
+                (ArrayList<OfferStep>) getList("steps"), (Targeting) getObject("targeting"),
+                (Checker) getObject("checker"), (ArrayList<String>) getList("admins"), getParam("showLimit"),
+                getParam("clickLimit"), getParam("startDate"), getParam("endDate"), getParam("length"),
+                getParam("sleepTime"), getParam("extraParams"), getParam("gameSlogan"));
+    }
+
+    private void checkAll(StringBuilder sb) {
+        for (Class<? extends InputChecker> clazz : Offer.getCheckers()) {
+            try {
+                InputChecker checker = clazz.newInstance();
+                if (checker instanceof IDChecker && replace) {
+                    new IDChecker(false).check(inputPanel, sb);
+                } else {
+                    checker.check(inputPanel, sb);
+                }
+            } catch (InstantiationException | IllegalAccessException ignored) {
+            }
         }
     }
 

@@ -11,10 +11,22 @@ import com.belkatechnologies.configeditor.managers.TreeManager;
 public class IDChecker extends InputChecker {
     private static final String[] SOCIAL_NETWORKS = new String[]{"_vk", "_ok", "_mr", "_fs", "_fb", "_jp"};
 
+    private boolean checkExistence;
+
+    public IDChecker() {
+        this.checkExistence = true;
+    }
+
+    public IDChecker(boolean checkExistence) {
+        this.checkExistence = checkExistence;
+    }
+
     @Override
     public void check(InputPanel inputPanel, StringBuilder sb) {
         String id = inputPanel.getParam("id");
-        checkExistence(id, sb);
+        if (checkExistence) {
+            checkExistence(id, sb);
+        }
         checkSN(id, sb);
     }
 

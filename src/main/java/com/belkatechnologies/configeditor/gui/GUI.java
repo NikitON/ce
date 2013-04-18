@@ -6,6 +6,8 @@ import com.belkatechnologies.configeditor.gui.panels.StatusBar;
 import com.belkatechnologies.configeditor.gui.panels.UpperPanel;
 import com.belkatechnologies.configeditor.gui.panels.tree.TreePanel;
 import com.belkatechnologies.configeditor.gui.panels.workbench.WorkbenchPanel;
+import com.belkatechnologies.configeditor.model.Application;
+import com.belkatechnologies.configeditor.model.Offer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -115,10 +117,18 @@ public class GUI implements ButtonsStateToggler {
     }
 
     public void showAddAppView() {
-        workbenchPanel.showAddAppView();
+        workbenchPanel.showAddAppView(null);
+    }
+
+    public void showAddAppView(Application app) {
+        workbenchPanel.showAddAppView(app);
     }
 
     public void showAddOfferView() {
-        workbenchPanel.showAddOfferView();
+        workbenchPanel.showAddOfferView(null);
+    }
+
+    public void showAddOfferView(Offer offer) {
+        workbenchPanel.showAddOfferView(offer);
     }
 }

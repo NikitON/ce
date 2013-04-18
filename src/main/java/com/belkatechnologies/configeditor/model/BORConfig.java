@@ -63,4 +63,9 @@ public class BORConfig {
     public boolean contains(String appId) {
         return getAppByID(appId) != null;
     }
+
+    public boolean contains(String appId, String offerId) {
+        Application app = getAppByID(appId);
+        return app != null && app.getOfferByID(offerId) != null;
+    }
 }

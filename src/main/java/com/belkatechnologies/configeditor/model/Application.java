@@ -65,8 +65,68 @@ public class Application {
         this.offers = offers == null ? new ArrayList<Offer>() : offers;
     }
 
-    public List<Offer> getOffers() {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getExplicitRewards() {
+        return explicitRewards;
+    }
+
+    public void setExplicitRewards(String explicitRewards) {
+        this.explicitRewards = explicitRewards;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getDefaultRewardValue() {
+        return defaultRewardValue;
+    }
+
+    public void setDefaultRewardValue(String defaultRewardValue) {
+        this.defaultRewardValue = defaultRewardValue;
+    }
+
+    public String getDefaultRewardType() {
+        return defaultRewardType;
+    }
+
+    public void setDefaultRewardType(String defaultRewardType) {
+        this.defaultRewardType = defaultRewardType;
+    }
+
+    public ArrayList<RewardWord> getWords() {
+        return words;
+    }
+
+    public void setWords(ArrayList<RewardWord> words) {
+        this.words = words;
+    }
+
+    public String getOldUsersTable() {
+        return oldUsersTable;
+    }
+
+    public void setOldUsersTable(String oldUsersTable) {
+        this.oldUsersTable = oldUsersTable;
+    }
+
+    public ArrayList<Offer> getOffers() {
         return offers;
+    }
+
+    public void setOffers(ArrayList<Offer> offers) {
+        this.offers = offers;
     }
 
     public Offer getOfferByID(String id) {
@@ -85,14 +145,6 @@ public class Application {
             }
         }
         return false;
-    }
-
-    public String getDefaultRewardValue() {
-        return defaultRewardValue;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public void moveOfferUp(Offer offer) {

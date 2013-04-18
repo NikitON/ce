@@ -120,9 +120,9 @@ public class Offer {
         this.description = description.equals("") ? null : description;
         this.rewardText = rewardText.equals("") ? null : rewardText;
         this.steps = steps;
-        this.targeting = targeting.isNull() ? null : targeting;
+        this.targeting = targeting == null || targeting.isNull() ? null : targeting;
         this.checker = checker;
-        this.admins = admins.isEmpty() ? null : admins;
+        this.admins = admins == null || admins.isEmpty() ? null : admins;
         this.showLimit = showLimit.equals("") ? null : showLimit;
         this.clickLimit = clickLimit.equals("") ? null : clickLimit;
         this.startDate = startDate;
@@ -137,16 +137,32 @@ public class Offer {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getIncrementLevel() {
         return incrementLevel;
+    }
+
+    public void setIncrementLevel(String incrementLevel) {
+        this.incrementLevel = incrementLevel;
     }
 
     public String getIncrementLevelDateOffset() {
         return incrementLevelDateOffset;
     }
 
+    public void setIncrementLevelDateOffset(String incrementLevelDateOffset) {
+        this.incrementLevelDateOffset = incrementLevelDateOffset;
+    }
+
     public String getMinLevel() {
         return minLevel;
+    }
+
+    public void setMinLevel(String minLevel) {
+        this.minLevel = minLevel;
     }
 
     public String getNewOnly() {
@@ -161,92 +177,168 @@ public class Offer {
         return targetURL;
     }
 
+    public void setTargetURL(String targetURL) {
+        this.targetURL = targetURL;
+    }
+
     public String getTargetURLFormat() {
         return targetURLFormat;
+    }
+
+    public void setTargetURLFormat(String targetURLFormat) {
+        this.targetURLFormat = targetURLFormat;
     }
 
     public String getReferralURL() {
         return referralURL;
     }
 
+    public void setReferralURL(String referralURL) {
+        this.referralURL = referralURL;
+    }
+
     public ArrayList<String> getImages() {
         return images;
+    }
+
+    public void setImages(ArrayList<String> images) {
+        this.images = images;
     }
 
     public String getTitle() {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getPrice() {
         return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     public String getShortDescriptions() {
         return shortDescriptions;
     }
 
+    public void setShortDescriptions(String shortDescriptions) {
+        this.shortDescriptions = shortDescriptions;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getRewardText() {
         return rewardText;
     }
 
+    public void setRewardText(String rewardText) {
+        this.rewardText = rewardText;
+    }
+
     public ArrayList<OfferStep> getSteps() {
         return steps;
+    }
+
+    public void setSteps(ArrayList<OfferStep> steps) {
+        this.steps = steps;
     }
 
     public Targeting getTargeting() {
         return targeting;
     }
 
+    public void setTargeting(Targeting targeting) {
+        this.targeting = targeting;
+    }
+
     public Checker getChecker() {
         return checker;
+    }
+
+    public void setChecker(Checker checker) {
+        this.checker = checker;
     }
 
     public ArrayList<String> getAdmins() {
         return admins;
     }
 
+    public void setAdmins(ArrayList<String> admins) {
+        this.admins = admins;
+    }
+
     public String getShowLimit() {
         return showLimit;
+    }
+
+    public void setShowLimit(String showLimit) {
+        this.showLimit = showLimit;
     }
 
     public String getClickLimit() {
         return clickLimit;
     }
 
+    public void setClickLimit(String clickLimit) {
+        this.clickLimit = clickLimit;
+    }
+
     public String getStartDate() {
         return startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public String getLength() {
-        return length;
-    }
-
-    public String getSleepTime() {
-        return sleepTime;
-    }
-
-    public String getExtraParams() {
-        return extraParams;
-    }
-
-    public String getGameSlogan() {
-        return gameSlogan;
     }
 
     public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
+    public String getEndDate() {
+        return endDate;
+    }
+
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public String getLength() {
+        return length;
+    }
+
+    public void setLength(String length) {
+        this.length = length;
+    }
+
+    public String getSleepTime() {
+        return sleepTime;
+    }
+
+    public void setSleepTime(String sleepTime) {
+        this.sleepTime = sleepTime;
+    }
+
+    public String getExtraParams() {
+        return extraParams;
+    }
+
+    public void setExtraParams(String extraParams) {
+        this.extraParams = extraParams;
+    }
+
+    public String getGameSlogan() {
+        return gameSlogan;
+    }
+
+    public void setGameSlogan(String gameSlogan) {
+        this.gameSlogan = gameSlogan;
     }
 
     public boolean isActive() {

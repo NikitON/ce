@@ -1,5 +1,7 @@
 package com.belkatechnologies.configeditor.gui.panels.workbench.mainPanel;
 
+import com.belkatechnologies.configeditor.model.Application;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,8 +12,8 @@ import java.awt.*;
 public class AddAppView extends JPanel {
     private AppInputPanel inputPanel;
 
-    public AddAppView() {
-        inputPanel = new AppInputPanel();
+    public AddAppView(Application app) {
+        inputPanel = new AppInputPanel(app);
         add(inputPanel, BorderLayout.CENTER);
     }
 

@@ -7,6 +7,7 @@ import com.belkatechnologies.utils.DateUtil;
 import com.belkatechnologies.utils.StringUtil;
 import com.belkatechnologies.utils.TimeUtil;
 import com.belkatechnologies.utils.XMLUtil;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.simpleframework.xml.Serializer;
@@ -24,6 +25,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -429,7 +432,7 @@ public class TreeManager {
     }
 
     public boolean contains(String appId, String offerId) {
-        return false;
+        return borConfig.contains(appId, offerId);
     }
 
     public List<Application> getApps() {
@@ -441,7 +444,57 @@ public class TreeManager {
         rebuildPanelTree();
     }
 
+    public void replaceApp(Application oldApp, Application newApp) {
+        Field[] fields = Application.class.getDeclaredFields();
+        for (Field field : fields) {
+            String fieldName = field.getName();
+            if (!fieldName.equals("offers")) {
+                try {
+                    Object object = PropertyUtils.getProperty(newApp, fieldName);
+                    PropertyUtils.setProperty(oldApp, fieldName, object);
+                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
+                }
+            }
+        }
+        rebuildPanelTree();
+    }
+
+    public void replaceOffer(Offer oldOffer, Offer newOffer) {
+        Field[] fields = Offer.class.getDeclaredFields();
+        for (Field field : fields) {
+            String fieldName = field.getName();
+            try {
+                Object object = PropertyUtils.getProperty(newOffer, fieldName);
+                PropertyUtils.setProperty(oldOffer, fieldName, object);
+                int a = 2 + 2;
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
+                System.out.println("exception");
+            }
+        }
+        rebuildPanelTree();
+    }
+
     public void insertOffer(String appId, Offer offer) {
         borConfig.getAppByID(appId).insertOffer(offer);
+    }
+
+    public void editSelected() {
+        TreePath path = tree.getSelectionPath();
+        if (path.getPathCount() == 2) {
+            Application app = getAppFromTreePath(path);
+            GUI.getInstance().showAddAppView(app);
+        } else if (path.getPathCount() == 3) {
+            Offer offer = getOfferFromTreePath(path);
+            GUI.getInstance().showAddOfferView(offer);
+        }
+    }
+
+    public Application getAppByOffer(Offer offer) {
+        for (Application application : borConfig.getApps()) {
+            if (application.getOffers().contains(offer)) {
+                return application;
+            }
+        }
+        return null;
     }
 }

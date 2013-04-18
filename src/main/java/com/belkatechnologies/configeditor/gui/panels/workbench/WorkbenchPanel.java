@@ -4,6 +4,8 @@ import com.belkatechnologies.configeditor.gui.ButtonsStateToggler;
 import com.belkatechnologies.configeditor.gui.Colors;
 import com.belkatechnologies.configeditor.gui.panels.workbench.mainPanel.AddAppView;
 import com.belkatechnologies.configeditor.gui.panels.workbench.mainPanel.AddOfferView;
+import com.belkatechnologies.configeditor.model.Application;
+import com.belkatechnologies.configeditor.model.Offer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,12 +29,12 @@ public class WorkbenchPanel extends JPanel implements ButtonsStateToggler {
         add(buttonsPanel, BorderLayout.PAGE_END);
     }
 
-    public void showAddAppView() {
-        showView(new AddAppView());
+    public void showAddAppView(Application app) {
+        showView(new AddAppView(app));
     }
 
-    public void showAddOfferView() {
-        showView(new AddOfferView());
+    public void showAddOfferView(Offer offer) {
+        showView(new AddOfferView(offer));
     }
 
     private void showView(JPanel panel) {

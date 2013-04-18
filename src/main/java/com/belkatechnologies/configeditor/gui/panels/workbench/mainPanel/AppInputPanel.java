@@ -13,6 +13,17 @@ import java.util.ArrayList;
  * Date: 05.04.13
  */
 public class AppInputPanel extends InputPanel {
+    public AppInputPanel(Object object) {
+        super(object);
+    }
+
+    @Override
+    protected void fillInputs() {
+        Application app = (Application) edited;
+        Field[] fields = Application.class.getDeclaredFields();
+        fillInputs(app, fields);
+    }
+
     @Override
     protected void initLists() {
         listsMap.put("words", new ArrayList<>());
@@ -21,8 +32,8 @@ public class AppInputPanel extends InputPanel {
     }
 
     @Override
-    protected void initSaveButtonListener() {
-        saveButton.addActionListener(new SaveAppListener(this));
+    protected void initSaveButtonListener(boolean replace) {
+        saveButton.addActionListener(new SaveAppListener(this, replace));
     }
 
     @Override
@@ -36,6 +47,6 @@ public class AppInputPanel extends InputPanel {
 
     @Override
     public Object getObject(String name) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 }

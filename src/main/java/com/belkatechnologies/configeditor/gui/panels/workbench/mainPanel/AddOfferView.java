@@ -1,5 +1,7 @@
 package com.belkatechnologies.configeditor.gui.panels.workbench.mainPanel;
 
+import com.belkatechnologies.configeditor.model.Offer;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,8 +12,8 @@ import java.awt.*;
 public class AddOfferView extends JPanel {
     private OfferInputPanel inputPanel;
 
-    public AddOfferView() {
-        inputPanel = new OfferInputPanel();
+    public AddOfferView(Offer offer) {
+        inputPanel = new OfferInputPanel(offer);
         add(inputPanel, BorderLayout.CENTER);
     }
 

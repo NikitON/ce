@@ -1,5 +1,7 @@
 package com.belkatechnologies.configeditor.listeners.tree;
 
+import com.belkatechnologies.configeditor.managers.TreeManager;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -10,6 +12,8 @@ import java.awt.event.MouseEvent;
 public class OffersTreeMouseListener extends MouseAdapter {
     @Override
     public void mousePressed(MouseEvent e) {
-        super.mousePressed(e);    //To change body of overridden methods use File | Settings | File Templates.
+        if (e.getClickCount() == 2) {
+            TreeManager.getInstance().editSelected();
+        }
     }
 }
