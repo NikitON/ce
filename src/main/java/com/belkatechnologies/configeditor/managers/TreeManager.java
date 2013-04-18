@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Author: Nikita Khvorov
@@ -429,5 +430,18 @@ public class TreeManager {
 
     public boolean contains(String appId, String offerId) {
         return false;
+    }
+
+    public List<Application> getApps() {
+        return borConfig.getApps();
+    }
+
+    public void insertApp(int index, Application app) {
+        borConfig.getApps().add(index, app);
+        rebuildPanelTree();
+    }
+
+    public void insertOffer(String appId, Offer offer) {
+        borConfig.getAppByID(appId).insertOffer(offer);
     }
 }

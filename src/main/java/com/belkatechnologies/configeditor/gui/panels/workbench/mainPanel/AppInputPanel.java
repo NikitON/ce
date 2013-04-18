@@ -17,6 +17,7 @@ public class AppInputPanel extends InputPanel {
     protected void initLists() {
         listsMap.put("words", new ArrayList<>());
         ignored.add("offers");
+        ignored.add("CHECKERS");
     }
 
     @Override
@@ -31,5 +32,10 @@ public class AppInputPanel extends InputPanel {
         addInputs(inputsPanel, fields);
         SpringUtil.makeCompactGrid(inputsPanel, inputCount.get(), 4, 0, 0, 7, 7);
         return inputsPanel;
+    }
+
+    @Override
+    public Object getObject(String name) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

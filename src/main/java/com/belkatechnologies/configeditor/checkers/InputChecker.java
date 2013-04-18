@@ -1,6 +1,11 @@
 package com.belkatechnologies.configeditor.checkers;
 
 import com.belkatechnologies.configeditor.gui.panels.workbench.mainPanel.InputPanel;
+import com.belkatechnologies.utils.StringUtil;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * Author: Nikita Khvorov
@@ -8,4 +13,48 @@ import com.belkatechnologies.configeditor.gui.panels.workbench.mainPanel.InputPa
  */
 public abstract class InputChecker {
     public abstract void check(InputPanel inputPanel, StringBuilder sb);
+
+    protected boolean checkEmpty(String str, String field, StringBuilder sb) {
+        if (!StringUtil.isOkString(str)) {
+            sb.append(field).append(": Should not be empty.\n");
+            return true;
+        }
+        return false;
+    }
+
+    protected void checkBoolean(String str, String field, StringBuilder sb) {
+        if (StringUtil.isOkString(str) && (!"true".equals(str) && !"false".equals(str))) {
+            sb.append(field).append(": Should be \"true\", \"false\" or empty.\n");
+        }
+    }
+
+    protected void checkInteger(String str, String field, StringBuilder sb) {
+        try {
+            Integer.parseInt(str);
+        } catch (NumberFormatException e) {
+            sb.append(field).append(": Should be correct integer.\n");
+        }
+    }
+
+    protected void checkDouble(String str, String field, StringBuilder sb) {
+        try {
+            Double.parseDouble(str);
+        } catch (NumberFormatException e) {
+            sb.append(field).append(": Should be correct double.\n");
+        }
+    }
+
+    protected void checkList(List list, String field, StringBuilder sb) {
+        if (list == null || list.isEmpty()) {
+            sb.append(field).append(": Should contain at least 1 element.\n");
+        }
+    }
+
+    protected void checkDate(String str, String field, StringBuilder sb) {
+        try {
+            new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(str);
+        } catch (ParseException e) {
+            sb.append(field).append(": Should be \"yyyy-MM-dd HH:mm\"-formatted date.\n");
+        }
+    }
 }

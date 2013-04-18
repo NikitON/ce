@@ -24,6 +24,7 @@ public abstract class InputPanel extends JPanel {
     protected List<String> ignored;
     protected List<String> complex;
     protected Map<String, JTextComponent> inputs;
+    protected Map<String, JComboBox> comboInputs;
     protected JButton saveButton;
 
     protected InputPanel() {
@@ -31,6 +32,7 @@ public abstract class InputPanel extends JPanel {
         this.saveButton = new JButton("SAVE");
         this.listsMap = new HashMap<>();
         this.inputs = new HashMap<>();
+        this.comboInputs = new HashMap<>();
         this.ignored = new ArrayList<>();
         this.complex = new ArrayList<>();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -58,7 +60,7 @@ public abstract class InputPanel extends JPanel {
                             new AddListener<>(this, fieldName, listClass),
                             new RemoveListener(this, fieldName));
                 } else if (complex.contains(fieldName)) {
-                    addComplexInput(inputsPanel, fieldName);
+                    addSpecialInput(inputsPanel, fieldName);
                 } else {
                     addSimpleInput(inputsPanel, fieldName);
                 }
@@ -72,8 +74,12 @@ public abstract class InputPanel extends JPanel {
         addRow(inputsPanel, name, textField, new JPanel(), new JPanel());
     }
 
-    protected void addComplexInput(JPanel inputsPanel, String name) {
-        addRow(inputsPanel, name, new JButton("Modify"), new JPanel(), new JPanel());
+    protected void addSpecialInput(JPanel inputsPanel, String name) {
+        addSpecialInput(inputsPanel, name, new JButton("Modify"));
+    }
+
+    protected void addSpecialInput(JPanel inputsPanel, String name, JComponent component) {
+        addRow(inputsPanel, name, component, new JPanel(), new JPanel());
     }
 
     protected void addListInput(JPanel inputsPanel, String name, ActionListener addListener,
@@ -112,6 +118,12 @@ public abstract class InputPanel extends JPanel {
     public String getParam(String name) {
         return inputs.get(name).getText();
     }
+
+    public String getComboParam(String name) {
+        return inputs.get(name).getSelectedText();
+    }
+
+    public abstract Object getObject(String name);
 
     protected String listToString(List<?> list) {
         if (list == null || list.isEmpty()) {

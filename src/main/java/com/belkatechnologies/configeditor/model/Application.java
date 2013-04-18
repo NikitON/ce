@@ -1,7 +1,7 @@
 package com.belkatechnologies.configeditor.model;
 
 import com.belkatechnologies.configeditor.checkers.InputChecker;
-import com.belkatechnologies.configeditor.checkers.app.IDChecker;
+import com.belkatechnologies.configeditor.checkers.app.*;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
@@ -39,6 +39,11 @@ public class Application {
     private static List<Class<? extends InputChecker>> initCheckers() {
         List<Class<? extends InputChecker>> checkers = new ArrayList<>();
         checkers.add(IDChecker.class);
+        checkers.add(ExplicitRewardsChecker.class);
+        checkers.add(LinkChecker.class);
+        checkers.add(DefaultRVChecker.class);
+        checkers.add(DefaultRTChecker.class);
+        checkers.add(WordsChecker.class);
         return checkers;
     }
 
@@ -57,7 +62,7 @@ public class Application {
         this.defaultRewardType = defaultRewardType;
         this.words = words;
         this.oldUsersTable = oldUsersTable.equals("") ? null : oldUsersTable;
-        this.offers = offers;
+        this.offers = offers == null ? new ArrayList<Offer>() : offers;
     }
 
     public List<Offer> getOffers() {
@@ -110,5 +115,9 @@ public class Application {
     @Override
     public String toString() {
         return id;
+    }
+
+    public void insertOffer(Offer offer) {
+        offers.add(0, offer);
     }
 }

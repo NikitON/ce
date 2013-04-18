@@ -9,7 +9,7 @@ import com.belkatechnologies.configeditor.managers.TreeManager;
  * Date: 09.04.13
  */
 public class IDChecker extends InputChecker {
-    private static final String[] SOCIAL_NETWORKS = new String[]{"_vk", "_ok", "_mr", "_fs", "_fb"};
+    private static final String[] SOCIAL_NETWORKS = new String[]{"_vk", "_ok", "_mr", "_fs", "_fb", "_jp"};
 
     @Override
     public void check(InputPanel inputPanel, StringBuilder sb) {
@@ -20,7 +20,7 @@ public class IDChecker extends InputChecker {
 
     private void checkExistence(String id, StringBuilder sb) {
         if (TreeManager.getInstance().contains(id)) {
-            sb.append("ID: Application with id='").append(id).append("' already exists. \n");
+            sb.append("ID: Application with id='").append(id).append("' already exists.\n");
         }
     }
 
@@ -30,6 +30,10 @@ public class IDChecker extends InputChecker {
                 return;
             }
         }
-        sb.append("ID: Application id should contain Social Network. \n");
+        sb.append("ID: Application id should contain Social Network.\n    ( ");
+        for (String socialNetwork : SOCIAL_NETWORKS) {
+            sb.append(socialNetwork).append(" ");
+        }
+        sb.append(")\n");
     }
 }

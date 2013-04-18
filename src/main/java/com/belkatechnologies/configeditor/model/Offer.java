@@ -1,5 +1,7 @@
 package com.belkatechnologies.configeditor.model;
 
+import com.belkatechnologies.configeditor.checkers.InputChecker;
+import com.belkatechnologies.configeditor.checkers.offer.*;
 import com.belkatechnologies.utils.DateUtil;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -9,6 +11,7 @@ import org.simpleframework.xml.Root;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Author: Nikita Khvorov
@@ -69,6 +72,34 @@ public class Offer {
     private String extraParams;
     @Element(required = false)
     private String gameSlogan;
+
+    private static final List<Class<? extends InputChecker>> CHECKERS = initCheckers();
+
+    private static List<Class<? extends InputChecker>> initCheckers() {
+        List<Class<? extends InputChecker>> checkers = new ArrayList<>();
+        checkers.add(IDChecker.class);
+        checkers.add(IncLevelChecker.class);
+        checkers.add(IncLevelDateOffset.class);
+        checkers.add(MinLevelChecker.class);
+        checkers.add(NewOnlyChecker.class);
+        checkers.add(TargetURLChecker.class);
+        checkers.add(ImagesChecker.class);
+        checkers.add(PriceChecker.class);
+        checkers.add(RewardInfoChecker.class);
+        checkers.add(TargetingChecker.class);
+        checkers.add(CheckerChecker.class);
+        checkers.add(ShowLimitChecker.class);
+        checkers.add(ClickLimitChecker.class);
+        checkers.add(StartDateChecker.class);
+        checkers.add(EndDateChecker.class);
+        checkers.add(LengthChecker.class);
+        checkers.add(SleepTimeChecker.class);
+        return checkers;
+    }
+
+    public static List<Class<? extends InputChecker>> getCheckers() {
+        return CHECKERS;
+    }
 
     public Offer() {
     }

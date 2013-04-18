@@ -33,4 +33,20 @@ public class RewardWord {
     public String toString() {
         return id;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getForm1() {
+        return form1;
+    }
+
+    public String getForm2() {
+        return form2;
+    }
+
+    public String getForm3() {
+        return form3;
+    }
 }
