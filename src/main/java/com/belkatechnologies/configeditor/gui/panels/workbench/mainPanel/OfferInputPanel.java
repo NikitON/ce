@@ -27,25 +27,17 @@ public class OfferInputPanel extends InputPanel {
     }
 
     @Override
-    public void refresh() {
-        super.refresh();
-        Offer offer = (Offer) edited;
-        comboInputs.get("appId").setSelectedItem(TreeManager.getInstance().getAppByOffer(offer));
-        comboInputs.get("appId").setEnabled(false);
-    }
-
-    @Override
     protected void initListsAndObjects() {
+        listsMap.put("admins", new ArrayList<>());
+        listsMap.put("images", new ArrayList<>());
+        listsMap.put("steps", new ArrayList<>());
+        complex.add("targeting");
+        complex.add("checker");
+        ignored.add("CHECKERS");
+        Offer offer = (Offer) edited;
         if (edited != null) {
-            Offer offer = (Offer) edited;
-            listsMap.put("admins", new ArrayList<>());
-            listsMap.put("images", new ArrayList<>());
-            listsMap.put("steps", new ArrayList<>());
-            complex.add("targeting");
             this.targeting = offer.getTargeting();
-            complex.add("checker");
             this.checker = offer.getChecker();
-            ignored.add("CHECKERS");
         }
     }
 
@@ -58,6 +50,11 @@ public class OfferInputPanel extends InputPanel {
     protected JPanel getInputsPanel() {
         JPanel inputsPanel = new JPanel(new SpringLayout());
         addAppIdInput(inputsPanel);
+        if (edited != null) {
+            Offer offer = (Offer) edited;
+            comboInputs.get("appId").setSelectedItem(TreeManager.getInstance().getAppByOffer(offer));
+            comboInputs.get("appId").setEnabled(false);
+        }
         Field[] fields = Offer.class.getDeclaredFields();
         addInputs(inputsPanel, fields);
         SpringUtil.makeCompactGrid(inputsPanel, inputCount.get(), 4, 0, 0, 7, 7);

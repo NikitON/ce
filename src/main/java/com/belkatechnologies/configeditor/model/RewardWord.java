@@ -29,24 +29,40 @@ public class RewardWord {
         this.form3 = form3;
     }
 
-    @Override
-    public String toString() {
+    public String getId() {
         return id;
     }
 
-    public String getId() {
-        return id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getForm1() {
         return form1;
     }
 
+    public void setForm1(String form1) {
+        this.form1 = form1;
+    }
+
     public String getForm2() {
         return form2;
     }
 
+    public void setForm2(String form2) {
+        this.form2 = form2;
+    }
+
     public String getForm3() {
         return form3;
+    }
+
+    public void setForm3(String form3) {
+        this.form3 = form3;
+    }
+
+    @Override
+    public String toString() {
+        return id;
     }
 }

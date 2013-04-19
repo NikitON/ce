@@ -32,12 +32,44 @@ public class OfferStep {
         this.rewardType = rewardType.equals("") ? null : rewardType;
     }
 
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getRewardText() {
+        return rewardText;
+    }
+
+    public void setRewardText(String rewardText) {
+        this.rewardText = rewardText;
+    }
+
     public String getRewardValue() {
         return rewardValue;
     }
 
     public void setRewardValue(String rewardValue) {
         this.rewardValue = rewardValue;
+    }
+
+    public String getRewardType() {
+        return rewardType;
+    }
+
+    public void setRewardType(String rewardType) {
+        this.rewardType = rewardType;
     }
 
     @Override

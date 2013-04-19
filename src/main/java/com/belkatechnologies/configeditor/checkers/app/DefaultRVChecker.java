@@ -11,7 +11,7 @@ public class DefaultRVChecker extends InputChecker {
     @Override
     public void check(InputPanel inputPanel, StringBuilder sb) {
         String defaultRewardValue = inputPanel.getParam("defaultRewardValue");
-        if (checkEmpty(defaultRewardValue, "Reward Value", sb)) {
+        if (!checkEmpty(defaultRewardValue, "Reward Value", sb)) {
             checkInteger(defaultRewardValue, "Reward Value", sb);
         }
     }

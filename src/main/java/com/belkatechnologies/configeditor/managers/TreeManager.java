@@ -495,4 +495,8 @@ public class TreeManager {
         }
         return null;
     }
+
+    public Application getAppById(String appId) {
+        return borConfig.getAppByID(appId);
+    }
 }

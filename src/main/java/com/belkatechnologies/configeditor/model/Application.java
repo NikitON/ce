@@ -172,4 +172,13 @@ public class Application {
     public void insertOffer(Offer offer) {
         offers.add(0, offer);
     }
+
+    public boolean containsWord(String type) {
+        for (RewardWord word : words) {
+            if (word.toString().equals(type)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

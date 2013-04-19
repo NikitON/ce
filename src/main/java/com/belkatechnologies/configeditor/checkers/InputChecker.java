@@ -28,11 +28,13 @@ public abstract class InputChecker {
         }
     }
 
-    protected void checkInteger(String str, String field, StringBuilder sb) {
+    protected boolean checkInteger(String str, String field, StringBuilder sb) {
         try {
             Integer.parseInt(str);
+            return true;
         } catch (NumberFormatException e) {
-            sb.append(field).append(": Should be correct integer.\n");
+            sb.append(field).append(": Should be correct number(s).\n");
+            return false;
         }
     }
 
@@ -40,7 +42,7 @@ public abstract class InputChecker {
         try {
             Double.parseDouble(str);
         } catch (NumberFormatException e) {
-            sb.append(field).append(": Should be correct double.\n");
+            sb.append(field).append(": Should be correct number.\n");
         }
     }
 

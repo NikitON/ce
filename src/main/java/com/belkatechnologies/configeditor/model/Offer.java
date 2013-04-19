@@ -120,7 +120,7 @@ public class Offer {
         this.description = description.equals("") ? null : description;
         this.rewardText = rewardText.equals("") ? null : rewardText;
         this.steps = steps;
-        this.targeting = targeting == null || targeting.isNull() ? null : targeting;
+        this.targeting = targeting == null || targeting.isNull() ? new Targeting() : targeting;
         this.checker = checker;
         this.admins = admins == null || admins.isEmpty() ? null : admins;
         this.showLimit = showLimit.equals("") ? null : showLimit;

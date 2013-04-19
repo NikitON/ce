@@ -2,10 +2,12 @@ package com.belkatechnologies.configeditor.gui.panels.workbench.mainPanel;
 
 import com.belkatechnologies.configeditor.listeners.workbench.AddListener;
 import com.belkatechnologies.configeditor.listeners.workbench.RemoveListener;
+import com.belkatechnologies.configeditor.listeners.workbench.SimpleEditListener;
 import org.apache.commons.beanutils.PropertyUtils;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -80,7 +82,10 @@ public abstract class InputPanel extends JPanel {
     protected void addSimpleInput(JPanel inputsPanel, String name) {
         JTextField textField = new JTextField(20);
         inputs.put(name, textField);
-        addRow(inputsPanel, name, textField, new JPanel(), new JPanel());
+        JButton button = new JButton("Expand");
+        button.setPreferredSize(new Dimension(100, 22));
+        button.addActionListener(new SimpleEditListener(textField));
+        addRow(inputsPanel, name, textField, button, new JPanel());
     }
 
     protected abstract void addSpecialInput(JPanel inputsPanel, String name);
@@ -88,6 +93,7 @@ public abstract class InputPanel extends JPanel {
     protected void addSpecialInput(JPanel inputsPanel, String name, ActionListener listener) {
         JButton button = new JButton("Edit");
         button.addActionListener(listener);
+        button.setPreferredSize(new Dimension(100, 22));
         addSpecialInput(inputsPanel, name, button);
     }
 
@@ -105,8 +111,10 @@ public abstract class InputPanel extends JPanel {
         inputs.put(name, textField);
         JButton add = new JButton("Add");
         add.addActionListener(addListener);
+        add.setPreferredSize(new Dimension(100, 22));
         JButton remove = new JButton("Remove");
         remove.addActionListener(removeListener);
+        remove.setPreferredSize(new Dimension(100, 22));
         addRow(inputsPanel, name, textField, add, remove);
     }
 
