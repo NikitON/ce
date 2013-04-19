@@ -466,9 +466,7 @@ public class TreeManager {
             try {
                 Object object = PropertyUtils.getProperty(newOffer, fieldName);
                 PropertyUtils.setProperty(oldOffer, fieldName, object);
-                int a = 2 + 2;
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
-                System.out.println("exception");
             }
         }
         rebuildPanelTree();

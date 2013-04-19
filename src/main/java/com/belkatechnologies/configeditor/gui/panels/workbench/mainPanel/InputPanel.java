@@ -30,7 +30,7 @@ public abstract class InputPanel extends JPanel {
     protected JButton saveButton;
     protected Object edited;
 
-    protected InputPanel() {
+    protected InputPanel(Object object) {
         this.inputCount = new AtomicInteger(0);
         this.saveButton = new JButton("SAVE");
         this.listsMap = new HashMap<>();
@@ -38,27 +38,21 @@ public abstract class InputPanel extends JPanel {
         this.comboInputs = new HashMap<>();
         this.ignored = new ArrayList<>();
         this.complex = new ArrayList<>();
+        this.edited = object;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        initLists();
+        initListsAndObjects();
         add(getInputsPanel());
         add(saveButton);
-    }
-
-    protected InputPanel(Object object) {
-        this();
-        if (object != null) {
-            this.edited = object;
-            fillInputs();
+        if (edited != null) {
+            refresh(edited);
             initSaveButtonListener(true);
         } else {
             initSaveButtonListener(false);
         }
     }
 
-    protected abstract void fillInputs();
-
-    protected abstract void initLists();
+    protected abstract void initListsAndObjects();
 
     protected abstract void initSaveButtonListener(boolean replace);
 
@@ -83,36 +77,25 @@ public abstract class InputPanel extends JPanel {
         }
     }
 
-    protected void fillInputs(Object object, Field[] fields) {
-        for (Field field : fields) {
-            String fieldName = field.getName();
-            if (!ignored.contains(fieldName)) {
-                try {
-                    if (listsMap.containsKey(fieldName)) {
-                        List list = (List) PropertyUtils.getProperty(object, fieldName);
-                        inputs.get(fieldName).setText(listToString(list));
-                        listsMap.put(fieldName, list);
-                    } else if (!complex.contains(fieldName)) {
-                        inputs.get(fieldName).setText((String) PropertyUtils.getProperty(object, fieldName));
-                    }
-                } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException ignored) {
-                }
-            }
-        }
-    }
-
     protected void addSimpleInput(JPanel inputsPanel, String name) {
         JTextField textField = new JTextField(20);
         inputs.put(name, textField);
         addRow(inputsPanel, name, textField, new JPanel(), new JPanel());
     }
 
-    protected void addSpecialInput(JPanel inputsPanel, String name) {
-        addSpecialInput(inputsPanel, name, new JButton("Modify"));
+    protected abstract void addSpecialInput(JPanel inputsPanel, String name);
+
+    protected void addSpecialInput(JPanel inputsPanel, String name, ActionListener listener) {
+        JButton button = new JButton("Edit");
+        button.addActionListener(listener);
+        addSpecialInput(inputsPanel, name, button);
     }
 
     protected void addSpecialInput(JPanel inputsPanel, String name, JComponent component) {
-        addRow(inputsPanel, name, component, new JPanel(), new JPanel());
+        JTextField textField = new JTextField(20);
+        textField.setFocusable(false);
+        inputs.put(name, textField);
+        addRow(inputsPanel, name, textField, component, new JPanel());
     }
 
     protected void addListInput(JPanel inputsPanel, String name, ActionListener addListener,
@@ -127,8 +110,12 @@ public abstract class InputPanel extends JPanel {
         addRow(inputsPanel, name, textField, add, remove);
     }
 
-    protected void addRow(JPanel holder, String name, JComponent component1, JComponent component2,
-                          JComponent component3) {
+    protected void addRow(JPanel holder, String name, JComponent component) {
+        addRow(holder, name, component, new JPanel(), new JPanel());
+    }
+
+    private void addRow(JPanel holder, String name, JComponent component1, JComponent component2,
+                        JComponent component3) {
         JLabel label = new JLabel(name, JLabel.TRAILING);
         label.setLabelFor(component1);
         holder.add(label);
@@ -142,6 +129,26 @@ public abstract class InputPanel extends JPanel {
         for (Map.Entry<String, List<?>> entry : listsMap.entrySet()) {
             inputs.get(entry.getKey()).setText(listToString(entry.getValue()));
         }
+        for (String s : complex) {
+            inputs.get(s).setText(getObjectString(s));
+        }
+    }
+
+    public void refresh(Object object) {
+        for (Map.Entry<String, JTextComponent> entry : inputs.entrySet()) {
+            String fieldName = entry.getKey();
+            if (!complex.contains(fieldName)) {
+                try {
+                    if (!listsMap.containsKey(fieldName)) {
+                        inputs.get(fieldName).setText((String) PropertyUtils.getProperty(object, fieldName));
+                    } else {
+                        listsMap.put(fieldName, (List) PropertyUtils.getProperty(object, fieldName));
+                    }
+                } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException ignored) {
+                }
+            }
+        }
+        refresh();
     }
 
     public List getList(String name) {
@@ -158,6 +165,15 @@ public abstract class InputPanel extends JPanel {
 
     public abstract Object getObject(String name);
 
+    private String getObjectString(String name) {
+        Object object = getObject(name);
+        if (object == null) {
+            return "";
+        } else {
+            return object.toString();
+        }
+    }
+
     protected String listToString(List<?> list) {
         if (list == null || list.isEmpty()) {
             return "";
@@ -168,4 +184,6 @@ public abstract class InputPanel extends JPanel {
     public Object getEdited() {
         return edited;
     }
+
+    public abstract void setObject(String name, Object object);
 }

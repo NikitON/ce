@@ -18,14 +18,7 @@ public class AppInputPanel extends InputPanel {
     }
 
     @Override
-    protected void fillInputs() {
-        Application app = (Application) edited;
-        Field[] fields = Application.class.getDeclaredFields();
-        fillInputs(app, fields);
-    }
-
-    @Override
-    protected void initLists() {
+    protected void initListsAndObjects() {
         listsMap.put("words", new ArrayList<>());
         ignored.add("offers");
         ignored.add("CHECKERS");
@@ -46,7 +39,15 @@ public class AppInputPanel extends InputPanel {
     }
 
     @Override
+    protected void addSpecialInput(JPanel inputsPanel, String name) {
+    }
+
+    @Override
     public Object getObject(String name) {
         return null;
+    }
+
+    @Override
+    public void setObject(String name, Object object) {
     }
 }

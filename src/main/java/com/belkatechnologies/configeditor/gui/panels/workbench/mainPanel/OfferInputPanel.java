@@ -1,5 +1,6 @@
 package com.belkatechnologies.configeditor.gui.panels.workbench.mainPanel;
 
+import com.belkatechnologies.configeditor.listeners.workbench.EditListener;
 import com.belkatechnologies.configeditor.listeners.workbench.SaveOfferListener;
 import com.belkatechnologies.configeditor.managers.TreeManager;
 import com.belkatechnologies.configeditor.model.Application;
@@ -23,28 +24,29 @@ public class OfferInputPanel extends InputPanel {
 
     public OfferInputPanel(Object object) {
         super(object);
-        Offer offer = (Offer) edited;
-        this.targeting = offer.getTargeting();
-        this.checker = offer.getChecker();
     }
 
     @Override
-    protected void fillInputs() {
+    public void refresh() {
+        super.refresh();
         Offer offer = (Offer) edited;
         comboInputs.get("appId").setSelectedItem(TreeManager.getInstance().getAppByOffer(offer));
         comboInputs.get("appId").setEnabled(false);
-        Field[] fields = Offer.class.getDeclaredFields();
-        fillInputs(offer, fields);
     }
 
     @Override
-    protected void initLists() {
-        listsMap.put("admins", new ArrayList<>());
-        listsMap.put("images", new ArrayList<>());
-        listsMap.put("steps", new ArrayList<>());
-        complex.add("targeting");
-        complex.add("checker");
-        ignored.add("CHECKERS");
+    protected void initListsAndObjects() {
+        if (edited != null) {
+            Offer offer = (Offer) edited;
+            listsMap.put("admins", new ArrayList<>());
+            listsMap.put("images", new ArrayList<>());
+            listsMap.put("steps", new ArrayList<>());
+            complex.add("targeting");
+            this.targeting = offer.getTargeting();
+            complex.add("checker");
+            this.checker = offer.getChecker();
+            ignored.add("CHECKERS");
+        }
     }
 
     @Override
@@ -66,7 +68,19 @@ public class OfferInputPanel extends InputPanel {
         List<Application> apps = TreeManager.getInstance().getApps();
         JComboBox<Application> comboBox = new JComboBox<>(apps.toArray(new Application[apps.size()]));
         comboInputs.put("appId", comboBox);
-        addSpecialInput(inputsPanel, "APP ID", comboBox);
+        addRow(inputsPanel, "APP ID", comboBox);
+    }
+
+    @Override
+    protected void addSpecialInput(JPanel inputsPanel, String name) {
+        switch (name) {
+            case "targeting":
+                addSpecialInput(inputsPanel, name, new EditListener<>(this, name, Targeting.class));
+                break;
+            case "checker":
+                addSpecialInput(inputsPanel, name, new EditListener<>(this, name, Checker.class));
+                break;
+        }
     }
 
     @Override
@@ -78,6 +92,18 @@ public class OfferInputPanel extends InputPanel {
                 return checker;
             default:
                 return null;
+        }
+    }
+
+    @Override
+    public void setObject(String name, Object object) {
+        switch (name) {
+            case "targeting":
+                targeting = (Targeting) object;
+                break;
+            case "checker":
+                checker = (Checker) object;
+                break;
         }
     }
 }

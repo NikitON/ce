@@ -41,4 +41,73 @@ public class Checker {
         this.interval = interval.equals("") ? null : interval;
         this.maxUsers = maxUsers.equals("") ? null : maxUsers;
     }
+
+    public String getStrategy() {
+        return strategy;
+    }
+
+    public void setStrategy(String strategy) {
+        this.strategy = strategy;
+    }
+
+    public String getCheckUrl() {
+        return checkUrl;
+    }
+
+    public void setCheckUrl(String checkUrl) {
+        this.checkUrl = checkUrl;
+    }
+
+    public String getStatsUrl() {
+        return statsUrl;
+    }
+
+    public void setStatsUrl(String statsUrl) {
+        this.statsUrl = statsUrl;
+    }
+
+    public String getParams() {
+        return params;
+    }
+
+    public void setParams(String params) {
+        this.params = params;
+    }
+
+    public String getWrappers() {
+        return wrappers;
+    }
+
+    public void setWrappers(String wrappers) {
+        this.wrappers = wrappers;
+    }
+
+    public String getSeed() {
+        return seed;
+    }
+
+    public void setSeed(String seed) {
+        this.seed = seed;
+    }
+
+    public String getInterval() {
+        return interval;
+    }
+
+    public void setInterval(String interval) {
+        this.interval = interval;
+    }
+
+    public String getMaxUsers() {
+        return maxUsers;
+    }
+
+    public void setMaxUsers(String maxUsers) {
+        this.maxUsers = maxUsers;
+    }
+
+    @Override
+    public String toString() {
+        return strategy;
+    }
 }
