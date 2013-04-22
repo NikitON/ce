@@ -24,11 +24,14 @@ public class RewardInfoChecker extends InputChecker {
             checkDescriptions(steps, inputPanel.getParam("description"), sb);
             checkRewards(steps, inputPanel.getParam("rewardText"), sb);
             checkValues(steps, sb);
-            checkTypes(steps, inputPanel.getParam("appId"), sb);
+            checkTypes(steps, inputPanel.getComboParam("appId"), sb);
         }
     }
 
     private void checkTypes(List<OfferStep> steps, String appId, StringBuilder sb) {
+        if (appId == null) {
+            return;
+        }
         Application app = TreeManager.getInstance().getAppById(appId);
         for (OfferStep step : steps) {
             if (StringUtil.isOkString(step.getRewardType())) {

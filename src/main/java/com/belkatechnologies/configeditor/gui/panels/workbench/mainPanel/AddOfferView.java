@@ -12,8 +12,8 @@ import java.awt.*;
 public class AddOfferView extends JPanel {
     private OfferInputPanel inputPanel;
 
-    public AddOfferView(Offer offer) {
-        inputPanel = new OfferInputPanel(offer);
+    public AddOfferView(Offer offer, boolean copying) {
+        inputPanel = new OfferInputPanel(offer, copying);
         add(inputPanel, BorderLayout.CENTER);
     }
 

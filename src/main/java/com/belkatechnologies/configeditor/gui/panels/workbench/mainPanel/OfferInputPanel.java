@@ -22,8 +22,8 @@ public class OfferInputPanel extends InputPanel {
     private Targeting targeting;
     private Checker checker;
 
-    public OfferInputPanel(Object object) {
-        super(object);
+    public OfferInputPanel(Object object, boolean copying) {
+        super(object, copying);
     }
 
     @Override
@@ -42,8 +42,8 @@ public class OfferInputPanel extends InputPanel {
     }
 
     @Override
-    protected void initSaveButtonListener(boolean replace) {
-        saveButton.addActionListener(new SaveOfferListener(this, replace));
+    protected void initSaveButtonListener() {
+        saveButton.addActionListener(new SaveOfferListener(this, !copying));
     }
 
     @Override
@@ -53,7 +53,7 @@ public class OfferInputPanel extends InputPanel {
         if (edited != null) {
             Offer offer = (Offer) edited;
             comboInputs.get("appId").setSelectedItem(TreeManager.getInstance().getAppByOffer(offer));
-            comboInputs.get("appId").setEnabled(false);
+            comboInputs.get("appId").setEnabled(copying);
         }
         Field[] fields = Offer.class.getDeclaredFields();
         addInputs(inputsPanel, fields);

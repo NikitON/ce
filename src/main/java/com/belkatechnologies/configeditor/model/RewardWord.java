@@ -9,7 +9,7 @@ import org.simpleframework.xml.Root;
  * Date: 14.03.13
  */
 @Root(name = "word")
-public class RewardWord {
+public class RewardWord implements Cloneable {
     @Attribute
     private String id;
     @Element(required = false)
@@ -64,5 +64,15 @@ public class RewardWord {
     @Override
     public String toString() {
         return id;
+    }
+
+    @Override
+    protected RewardWord clone() throws CloneNotSupportedException {
+        RewardWord rewardWord = (RewardWord) super.clone();
+        rewardWord.id = id;
+        rewardWord.form1 = form1;
+        rewardWord.form2 = form2;
+        rewardWord.form3 = form3;
+        return rewardWord;
     }
 }

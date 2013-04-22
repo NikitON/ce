@@ -19,7 +19,7 @@ import java.util.List;
  */
 
 @Root
-public class Offer {
+public class Offer implements Cloneable {
     @Attribute
     private String id;
     @Element(required = false)
@@ -353,5 +353,48 @@ public class Offer {
     @Override
     public String toString() {
         return id;
+    }
+
+    @Override
+    public Offer clone() throws CloneNotSupportedException {
+        Offer offer = (Offer) super.clone();
+        offer.id = id;
+        offer.incrementLevel = incrementLevel;
+        offer.incrementLevelDateOffset = incrementLevelDateOffset;
+        offer.minLevel = minLevel;
+        offer.newOnly = newOnly;
+        offer.targetURL = targetURL;
+        offer.targetURLFormat = targetURLFormat;
+        offer.referralURL = referralURL;
+        offer.images = new ArrayList<>();
+        for (String image : images) {
+            offer.images.add(image);
+        }
+        offer.title = title;
+        offer.price = price;
+        offer.shortDescriptions = shortDescriptions;
+        offer.description = description;
+        offer.rewardText = rewardText;
+        offer.steps = new ArrayList<>();
+        for (OfferStep step : steps) {
+            offer.steps.add(step.clone());
+        }
+        offer.targeting = targeting.clone();
+        offer.checker = checker.clone();
+        if (admins != null) {
+            offer.admins = new ArrayList<>();
+            for (String admin : admins) {
+                offer.admins.add(admin);
+            }
+        }
+        offer.showLimit = showLimit;
+        offer.clickLimit = clickLimit;
+        offer.startDate = startDate;
+        offer.endDate = endDate;
+        offer.length = length;
+        offer.sleepTime = sleepTime;
+        offer.extraParams = extraParams;
+        offer.gameSlogan = gameSlogan;
+        return offer;
     }
 }

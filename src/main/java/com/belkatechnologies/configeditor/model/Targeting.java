@@ -4,7 +4,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Root
-public class Targeting {
+public class Targeting implements Cloneable {
     @Element(required = false)
     private String sex;
     @Element(required = false)
@@ -96,5 +96,17 @@ public class Targeting {
             return sb.substring(0, end) + "]";
         }
         return "ALL";
+    }
+
+    @Override
+    protected Targeting clone() throws CloneNotSupportedException {
+        Targeting targeting = (Targeting) super.clone();
+        targeting.sex = sex;
+        targeting.age = age;
+        targeting.countries = countries;
+        targeting.cities = cities;
+        targeting.groups = groups;
+        targeting.idEnds = idEnds;
+        return targeting;
     }
 }

@@ -13,8 +13,8 @@ import java.util.ArrayList;
  * Date: 05.04.13
  */
 public class AppInputPanel extends InputPanel {
-    public AppInputPanel(Object object) {
-        super(object);
+    public AppInputPanel(Object object, boolean copying) {
+        super(object, copying);
     }
 
     @Override
@@ -25,8 +25,8 @@ public class AppInputPanel extends InputPanel {
     }
 
     @Override
-    protected void initSaveButtonListener(boolean replace) {
-        saveButton.addActionListener(new SaveAppListener(this, replace));
+    protected void initSaveButtonListener() {
+        saveButton.addActionListener(new SaveAppListener(this, !copying));
     }
 
     @Override

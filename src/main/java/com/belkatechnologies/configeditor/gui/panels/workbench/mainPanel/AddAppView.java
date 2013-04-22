@@ -12,8 +12,8 @@ import java.awt.*;
 public class AddAppView extends JPanel {
     private AppInputPanel inputPanel;
 
-    public AddAppView(Application app) {
-        inputPanel = new AppInputPanel(app);
+    public AddAppView(Application app, boolean copying) {
+        inputPanel = new AppInputPanel(app, copying);
         add(inputPanel, BorderLayout.CENTER);
     }
 

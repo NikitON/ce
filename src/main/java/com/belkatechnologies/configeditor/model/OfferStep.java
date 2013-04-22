@@ -9,7 +9,7 @@ import org.simpleframework.xml.Root;
  * Date: 14.03.13
  */
 @Root(name = "step")
-public class OfferStep {
+public class OfferStep implements Cloneable {
     @Attribute
     private String level;
     @Element(required = false)
@@ -75,5 +75,16 @@ public class OfferStep {
     @Override
     public String toString() {
         return level;
+    }
+
+    @Override
+    protected OfferStep clone() throws CloneNotSupportedException {
+        OfferStep step = (OfferStep) super.clone();
+        step.level = level;
+        step.description = description;
+        step.rewardText = rewardText;
+        step.rewardValue = rewardValue;
+        step.rewardType = rewardType;
+        return step;
     }
 }

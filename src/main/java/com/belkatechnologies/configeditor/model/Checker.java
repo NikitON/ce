@@ -10,7 +10,7 @@ import org.simpleframework.xml.Root;
  */
 
 @Root
-public class Checker {
+public class Checker implements Cloneable {
     @Attribute
     private String strategy;
     @Element(required = false)
@@ -109,5 +109,19 @@ public class Checker {
     @Override
     public String toString() {
         return strategy;
+    }
+
+    @Override
+    protected Checker clone() throws CloneNotSupportedException {
+        Checker checker = (Checker) super.clone();
+        checker.strategy = strategy;
+        checker.checkUrl = checkUrl;
+        checker.statsUrl = statsUrl;
+        checker.params = params;
+        checker.wrappers = wrappers;
+        checker.seed = seed;
+        checker.interval = interval;
+        checker.maxUsers = maxUsers;
+        return checker;
     }
 }

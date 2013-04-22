@@ -31,8 +31,9 @@ public abstract class InputPanel extends JPanel {
     protected Map<String, JComboBox> comboInputs;
     protected JButton saveButton;
     protected Object edited;
+    protected boolean copying;
 
-    protected InputPanel(Object object) {
+    protected InputPanel(Object object, boolean copying) {
         this.inputCount = new AtomicInteger(0);
         this.saveButton = new JButton("SAVE");
         this.listsMap = new HashMap<>();
@@ -41,22 +42,21 @@ public abstract class InputPanel extends JPanel {
         this.ignored = new ArrayList<>();
         this.complex = new ArrayList<>();
         this.edited = object;
+        this.copying = copying;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         initListsAndObjects();
         add(getInputsPanel());
+        initSaveButtonListener();
         add(saveButton);
         if (edited != null) {
             refresh(edited);
-            initSaveButtonListener(true);
-        } else {
-            initSaveButtonListener(false);
         }
     }
 
     protected abstract void initListsAndObjects();
 
-    protected abstract void initSaveButtonListener(boolean replace);
+    protected abstract void initSaveButtonListener();
 
     protected abstract JPanel getInputsPanel();
 
@@ -168,7 +168,8 @@ public abstract class InputPanel extends JPanel {
     }
 
     public String getComboParam(String name) {
-        return comboInputs.get(name).getSelectedItem().toString();
+        Object object = comboInputs.get(name).getSelectedItem();
+        return object == null ? null : object.toString();
     }
 
     public abstract Object getObject(String name);

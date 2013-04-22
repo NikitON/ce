@@ -16,7 +16,7 @@ import java.util.List;
  */
 
 @Root(name = "app")
-public class Application {
+public class Application implements Cloneable {
     @Attribute
     private String id;
     @Attribute(required = false)
@@ -180,5 +180,27 @@ public class Application {
             }
         }
         return false;
+    }
+
+    @Override
+    public Application clone() throws CloneNotSupportedException {
+        Application application = (Application) super.clone();
+        application.id = id;
+        application.explicitRewards = explicitRewards;
+        application.link = link;
+        application.defaultRewardValue = defaultRewardValue;
+        application.defaultRewardType = defaultRewardType;
+        application.words = new ArrayList<>();
+        for (RewardWord word : words) {
+            application.words.add(word.clone());
+        }
+        application.oldUsersTable = oldUsersTable;
+        if (offers != null) {
+            application.offers = new ArrayList<>();
+            for (Offer offer : offers) {
+                application.offers.add(offer.clone());
+            }
+        }
+        return application;
     }
 }

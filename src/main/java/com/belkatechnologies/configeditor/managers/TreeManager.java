@@ -499,4 +499,28 @@ public class TreeManager {
     public Application getAppById(String appId) {
         return borConfig.getAppByID(appId);
     }
+
+    public void copySelectedApp() throws CloneNotSupportedException {
+        TreePath path = tree.getSelectionPath();
+        if (path == null) {
+            GUI.getInstance().showErrorMessageDialog("Copying", "Nothing is selected.");
+        } else if (path.getPathCount() != 2) {
+            GUI.getInstance().showErrorMessageDialog("Copying", "The selection should be an app!");
+        } else {
+            Application app = getAppFromTreePath(path).clone();
+            GUI.getInstance().showAddAppView(app, true);
+        }
+    }
+
+    public void copySelectedOffer() throws CloneNotSupportedException {
+        TreePath path = tree.getSelectionPath();
+        if (path == null) {
+            GUI.getInstance().showErrorMessageDialog("Copying", "Nothing is selected.");
+        } else if (path.getPathCount() != 3) {
+            GUI.getInstance().showErrorMessageDialog("Copying", "The selection should be an offer!");
+        } else {
+            Offer offer = getOfferFromTreePath(path).clone();
+            GUI.getInstance().showAddOfferView(offer, true);
+        }
+    }
 }

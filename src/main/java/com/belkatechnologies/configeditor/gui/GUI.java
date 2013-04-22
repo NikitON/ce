@@ -124,6 +124,10 @@ public class GUI implements ButtonsStateToggler {
         workbenchPanel.showAddAppView(app);
     }
 
+    public void showAddAppView(Application app, boolean copying) {
+        workbenchPanel.showAddAppView(app, copying);
+    }
+
     public void showAddOfferView() {
         workbenchPanel.showAddOfferView(null);
     }
@@ -131,4 +135,9 @@ public class GUI implements ButtonsStateToggler {
     public void showAddOfferView(Offer offer) {
         workbenchPanel.showAddOfferView(offer);
     }
+
+    public void showAddOfferView(Offer offer, boolean copying) {
+        workbenchPanel.showAddOfferView(offer, copying);
+    }
+
 }

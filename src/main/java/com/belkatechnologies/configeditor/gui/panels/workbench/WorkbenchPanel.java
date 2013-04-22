@@ -30,11 +30,19 @@ public class WorkbenchPanel extends JPanel implements ButtonsStateToggler {
     }
 
     public void showAddAppView(Application app) {
-        showView(new AddAppView(app));
+        showAddAppView(app, false);
+    }
+
+    public void showAddAppView(Application app, boolean copying) {
+        showView(new AddAppView(app, copying));
     }
 
     public void showAddOfferView(Offer offer) {
-        showView(new AddOfferView(offer));
+        showAddOfferView(offer, false);
+    }
+
+    public void showAddOfferView(Offer offer, boolean copying) {
+        showView(new AddOfferView(offer, copying));
     }
 
     private void showView(JPanel panel) {

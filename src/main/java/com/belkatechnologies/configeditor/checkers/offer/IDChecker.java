@@ -23,7 +23,7 @@ public class IDChecker extends InputChecker {
     public void check(InputPanel inputPanel, StringBuilder sb) {
         String id = inputPanel.getParam("id");
         String appId = inputPanel.getComboParam("appId");
-        if (!checkEmpty(id, "ID", sb) && checkExistence) {
+        if (!checkEmpty(appId, "APP ID", sb) && !checkEmpty(id, "ID", sb) && checkExistence) {
             checkExistence(appId, id, sb);
         }
     }

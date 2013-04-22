@@ -12,7 +12,7 @@ import java.awt.*;
 public class ConfigEditor extends JFrame {
     public ConfigEditor() {
         setTitle("BORSCH");
-        setMinimumSize(new Dimension(1100, 400));
+        setMinimumSize(new Dimension(1275, 400));
         setExtendedState(Frame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
