@@ -476,7 +476,7 @@ public class TreeManager {
         borConfig.getAppByID(appId).insertOffer(offer);
     }
 
-    public void editSelected() {
+    public void editSelected() throws NullPointerException {
         TreePath path = tree.getSelectionPath();
         if (path.getPathCount() == 2) {
             Application app = getAppFromTreePath(path);

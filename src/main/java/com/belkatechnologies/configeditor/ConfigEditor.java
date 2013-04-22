@@ -11,7 +11,7 @@ import java.awt.*;
  */
 public class ConfigEditor extends JFrame {
     public ConfigEditor() {
-        setTitle("Config Editor");
+        setTitle("BORSCH");
         setMinimumSize(new Dimension(1100, 400));
         setExtendedState(Frame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);

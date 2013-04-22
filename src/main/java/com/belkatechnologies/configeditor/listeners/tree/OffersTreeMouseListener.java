@@ -13,7 +13,10 @@ public class OffersTreeMouseListener extends MouseAdapter {
     @Override
     public void mousePressed(MouseEvent e) {
         if (e.getClickCount() == 2) {
-            TreeManager.getInstance().editSelected();
+            try {
+                TreeManager.getInstance().editSelected();
+            } catch (NullPointerException ignored) {
+            }
         }
     }
 }
