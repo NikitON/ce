@@ -21,7 +21,7 @@ public class RewardInfoChecker extends InputChecker {
             sb.append("STEPS: Should contain at least 1 step.\n");
         } else {
             checkLevels(steps, sb);
-            checkDescriptions(steps, inputPanel.getParam("description"), sb);
+            checkDescriptions(steps, inputPanel.getParam("description"), inputPanel.getParam("shortDescriptions"), sb);
             checkRewards(steps, inputPanel.getParam("rewardText"), sb);
             checkValues(steps, sb);
             checkTypes(steps, inputPanel.getComboParam("appId"), sb);
@@ -65,22 +65,30 @@ public class RewardInfoChecker extends InputChecker {
         }
     }
 
-    private void checkDescriptions(List<OfferStep> steps, String description, StringBuilder sb) {
+    private void checkDescriptions(List<OfferStep> steps, String description, String shortDescriptions,
+                                   StringBuilder sb) {
         if (StringUtil.isOkString(description)) {
             checkReplacers(description, "Description", sb);
         } else {
+            boolean hasAnyDescription = false;
             for (OfferStep step : steps) {
-                if (!StringUtil.isOkString(step.getDescription())) {
-                    sb.append("Steps Descriptions: Should not be empty if global description is empty.\n");
+                if (StringUtil.isOkString(step.getDescription())) {
+                    hasAnyDescription = true;
                     break;
                 }
+            }
+            if (!hasAnyDescription && StringUtil.isOkString(shortDescriptions)) {
+                hasAnyDescription = true;
+            }
+            if (!hasAnyDescription) {
+                sb.append("Steps Descriptions: Should not be empty if global description is empty.\n");
             }
         }
     }
 
     private void checkReplacers(String text, String field, StringBuilder sb) {
         if (!text.contains("%R_LEVEL%") || !text.contains("%R_TYPE%") || !text.contains("%R_VALUE%")) {
-            sb.append(field).append(": Should contain %R_LEVEL%, %R_VALUE% and %R_TYPE%");
+            sb.append(field).append(": Should contain %R_LEVEL%, %R_VALUE% and %R_TYPE%.\n");
         }
     }
 

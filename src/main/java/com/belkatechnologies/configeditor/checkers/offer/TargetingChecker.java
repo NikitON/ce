@@ -25,9 +25,13 @@ public class TargetingChecker extends InputChecker {
 
     private void checkInterval(String line, String field, StringBuilder sb) {
         if (StringUtil.isOkString(line)) {
-            String[] bounds = line.split("-");
-            checkInteger(bounds[0], field + " From", sb);
-            checkInteger(bounds[1], field + " To", sb);
+            if (line.contains("-")) {
+                String[] bounds = line.split("-");
+                checkInteger(bounds[0], field + " From", sb);
+                checkInteger(bounds[1], field + " To", sb);
+            } else {
+                sb.append(field).append(": Should contain two \"-\"-separated numbers.\n");
+            }
         }
     }
 

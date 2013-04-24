@@ -66,7 +66,7 @@ public class SimpleEditListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            textArea.setText(textArea.getText() + text);
+            textArea.insert(text, textArea.getCaretPosition());
         }
     }
 }

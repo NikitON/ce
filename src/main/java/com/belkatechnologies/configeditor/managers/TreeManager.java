@@ -21,10 +21,7 @@ import org.w3c.dom.NodeList;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
@@ -60,7 +57,11 @@ public class TreeManager {
     }
 
     public void serializeTree(File file) throws Exception {
-        getDefaultSerializer().write(borConfig, file);
+        serializeTree(new FileOutputStream(file));
+    }
+
+    public void serializeTree(OutputStream outputStream) throws Exception {
+        getDefaultSerializer().write(borConfig, outputStream);
     }
 
     public void uploadTree(String server, String path, Credentials credentials) {
@@ -69,10 +70,11 @@ public class TreeManager {
             ftpClient.connect(server, 21);
             ftpClient.login(credentials.getUsername(), credentials.getPassword());
             ftpClient.enterLocalPassiveMode();
+            ftpClient.setBufferSize(0);
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
             OutputStream outputStream = ftpClient.storeFileStream(path);
             try {
-                getDefaultSerializer().write(borConfig, outputStream);
+                serializeTree(outputStream);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -308,7 +310,7 @@ public class TreeManager {
         GUI.getInstance().replaceTreePanel(tree);
     }
 
-    private Serializer getDefaultSerializer() {
+    private Persister getDefaultSerializer() {
         return new Persister(new Format(4));
     }
 
