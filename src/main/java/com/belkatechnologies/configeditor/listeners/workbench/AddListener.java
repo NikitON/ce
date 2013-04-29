@@ -82,7 +82,9 @@ public class AddListener<E> implements ActionListener {
             } else {
                 try {
                     inputPanel.getList(name).add(constructor.newInstance(getValuesFromInputs()));
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
+                } catch (InstantiationException ignored) {
+                } catch (IllegalAccessException ignored) {
+                } catch (InvocationTargetException ignored) {
                 }
             }
         }

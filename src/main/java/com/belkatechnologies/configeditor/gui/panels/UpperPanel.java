@@ -40,7 +40,7 @@ public class UpperPanel extends JPanel implements ButtonsStateToggler {
     }
 
     private void addSaveButtons() {
-        saveButtons = new ArrayList<>();
+        saveButtons = new ArrayList<JButton>();
         addButton("Save", new SaveXMLListener(), true);
         addButton("Save As", new SaveAsXMLListener(), true);
         addButton("Upload Staging", new UploadXMLListener(true), true);

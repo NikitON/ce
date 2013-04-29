@@ -2,6 +2,7 @@ package com.belkatechnologies.configeditor.managers;
 
 import com.belkatechnologies.configeditor.gui.GUI;
 import com.belkatechnologies.configeditor.gui.panels.tree.OffersTree;
+import com.belkatechnologies.configeditor.logging.Logger;
 import com.belkatechnologies.configeditor.model.*;
 import com.belkatechnologies.utils.DateUtil;
 import com.belkatechnologies.utils.StringUtil;
@@ -67,6 +68,7 @@ public class TreeManager {
     public void uploadTree(String server, String path, Credentials credentials) {
         FTPClient ftpClient = new FTPClient();
         try {
+            Logger.info("UPLOADING START");
             ftpClient.connect(server, 21);
             ftpClient.login(credentials.getUsername(), credentials.getPassword());
             ftpClient.enterLocalPassiveMode();
@@ -76,16 +78,16 @@ public class TreeManager {
             try {
                 serializeTree(outputStream);
             } catch (Exception e) {
-                e.printStackTrace();
+                Logger.error("UPLOAD SERIALIZATION", e);
             } finally {
                 try {
                     outputStream.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Logger.error("UPLOAD CLOSING STREAM", e);
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.error("UPLOAD IO", e);
         } finally {
             try {
                 if (ftpClient.isConnected()) {
@@ -93,7 +95,7 @@ public class TreeManager {
                     ftpClient.disconnect();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                Logger.error("UPLOAD DISCONNECT", e);
             }
         }
     }
@@ -115,14 +117,14 @@ public class TreeManager {
     }
 
     private ArrayList<EmailGroup> parseEmails(Document doc) {
-        ArrayList<EmailGroup> emails = new ArrayList<>();
+        ArrayList<EmailGroup> emails = new ArrayList<EmailGroup>();
         NodeList emailsNode = doc.getElementsByTagName("emails");
         if (emailsNode != null && emailsNode.getLength() != 0) {
             NodeList groupXMLList = XMLUtil.getNodesByName(emailsNode.item(0), "group");
             for (int i = 0; i < groupXMLList.getLength(); i++) {
                 String groupName = XMLUtil.getAttribute(groupXMLList.item(i), "id");
                 NodeList emailXMLList = XMLUtil.getNodesByName(groupXMLList.item(i), "email");
-                ArrayList<String> groupEmails = new ArrayList<>();
+                ArrayList<String> groupEmails = new ArrayList<String>();
                 for (int j = 0; j < emailXMLList.getLength(); j++) {
                     groupEmails.add(emailXMLList.item(j).getTextContent());
                 }
@@ -133,7 +135,7 @@ public class TreeManager {
     }
 
     private ArrayList<Application> parseApps(Document doc) throws Exception {
-        ArrayList<Application> apps = new ArrayList<>();
+        ArrayList<Application> apps = new ArrayList<Application>();
         NodeList appList = doc.getElementsByTagName("app");
         for (int j = 0; j < appList.getLength(); j++) {
             Node appNode = appList.item(j);
@@ -153,7 +155,7 @@ public class TreeManager {
     }
 
     private ArrayList<RewardWord> parseWords(Node wordsNode) throws Exception {
-        ArrayList<RewardWord> rewardWords = new ArrayList<>();
+        ArrayList<RewardWord> rewardWords = new ArrayList<RewardWord>();
         NodeList wordsList = ((Element) wordsNode).getElementsByTagName("word");
         for (int i = 0; i < wordsList.getLength(); i++) {
             Element word = (Element) wordsList.item(i);
@@ -169,7 +171,7 @@ public class TreeManager {
     private ArrayList<Offer> parseOffers(Element appNode) throws Exception {
         NodeList offersNode = appNode.getElementsByTagName("offers");
         NodeList offerXMLList = XMLUtil.getNodesByName(offersNode.item(0), "offer");
-        ArrayList<Offer> offerList = new ArrayList<>();
+        ArrayList<Offer> offerList = new ArrayList<Offer>();
         for (int i = 0; i < offerXMLList.getLength(); i++) {
             Node node = offerXMLList.item(i);
             String id = XMLUtil.getAttribute(node, "id");
@@ -231,7 +233,7 @@ public class TreeManager {
     }
 
     private ArrayList<OfferStep> parseSteps(Node node) throws Exception {
-        ArrayList<OfferStep> steps = new ArrayList<>();
+        ArrayList<OfferStep> steps = new ArrayList<OfferStep>();
         String[] levels = XMLUtil.getAttribute(node, "level").split("\\|");
         int stepCount = levels.length;
         String[] rewardValues = getDataArray(XMLUtil.getAttribute(node, "rewardValue"), stepCount);
@@ -274,7 +276,7 @@ public class TreeManager {
     }
 
     private ArrayList<String> parseImages(Node node) {
-        ArrayList<String> images = new ArrayList<>();
+        ArrayList<String> images = new ArrayList<String>();
         String image = XMLUtil.getAttribute(node, "image");
         if (StringUtil.isOkString(image)) {
             images.add(image);
@@ -289,7 +291,7 @@ public class TreeManager {
     }
 
     private ArrayList<String> parseAdmins(Element element) throws Exception {
-        ArrayList<String> adminList = new ArrayList<>();
+        ArrayList<String> adminList = new ArrayList<String>();
         String adminsLine = XMLUtil.getDataFromNode(element.getElementsByTagName("admins"));
         if (!("".equals(adminsLine))) {
             Collections.addAll(adminList, adminsLine.split(","));
@@ -454,7 +456,9 @@ public class TreeManager {
                 try {
                     Object object = PropertyUtils.getProperty(newApp, fieldName);
                     PropertyUtils.setProperty(oldApp, fieldName, object);
-                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
+                } catch (IllegalAccessException ignored) {
+                } catch (NoSuchMethodException ignored) {
+                } catch (InvocationTargetException ignored) {
                 }
             }
         }
@@ -468,7 +472,9 @@ public class TreeManager {
             try {
                 Object object = PropertyUtils.getProperty(newOffer, fieldName);
                 PropertyUtils.setProperty(oldOffer, fieldName, object);
-            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
+            } catch (IllegalAccessException ignored) {
+            } catch (NoSuchMethodException ignored) {
+            } catch (InvocationTargetException ignored) {
             }
         }
         rebuildPanelTree();

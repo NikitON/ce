@@ -37,15 +37,8 @@ public class TargetingChecker extends InputChecker {
 
     private void checkSex(String sex, StringBuilder sb) {
         if (StringUtil.isOkString(sex)) {
-            switch (sex) {
-                case "male":
-                case "female":
-                case "all":
-                case "1":
-                case "2":
-                    return;
-                default:
-                    sb.append("Targeting: Sex: Should be female(1), male(2), all, or empty.\n");
+            if (!sex.equals("male") && !sex.equals("female") && !sex.equals("all") && !sex.equals("1") && !sex.equals("2")) {
+                sb.append("Targeting: Sex: Should be female(1), male(2), all, or empty.\n");
             }
         }
     }

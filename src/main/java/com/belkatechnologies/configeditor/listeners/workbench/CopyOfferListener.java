@@ -15,7 +15,6 @@ public class CopyOfferListener implements ActionListener {
         try {
             TreeManager.getInstance().copySelectedOffer();
         } catch (CloneNotSupportedException ignored) {
-            ignored.printStackTrace();
         }
     }
 }

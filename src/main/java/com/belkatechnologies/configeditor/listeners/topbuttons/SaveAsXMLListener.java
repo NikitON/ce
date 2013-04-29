@@ -1,6 +1,7 @@
 package com.belkatechnologies.configeditor.listeners.topbuttons;
 
 import com.belkatechnologies.configeditor.gui.GUI;
+import com.belkatechnologies.configeditor.logging.Logger;
 import com.belkatechnologies.configeditor.managers.TreeManager;
 
 import javax.swing.*;
@@ -37,7 +38,7 @@ public class SaveAsXMLListener extends IOXMLListener {
                         GUI.getInstance().runLoading("Saving to " + fileChooser.getSelectedFile().getName());
                         TreeManager.getInstance().serializeTree(fileChooser.getSelectedFile());
                     } catch (Exception e1) {
-                        e1.printStackTrace();
+                        Logger.error("SAVE AS", e1);
                     } finally {
                         GUI.getInstance().stopLoading();
                     }

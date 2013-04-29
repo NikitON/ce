@@ -37,7 +37,7 @@ public class Application implements Cloneable {
     private static final List<Class<? extends InputChecker>> CHECKERS = initCheckers();
 
     private static List<Class<? extends InputChecker>> initCheckers() {
-        List<Class<? extends InputChecker>> checkers = new ArrayList<>();
+        List<Class<? extends InputChecker>> checkers = new ArrayList<Class<? extends InputChecker>>();
         checkers.add(IDChecker.class);
         checkers.add(ExplicitRewardsChecker.class);
         checkers.add(LinkChecker.class);
@@ -190,13 +190,13 @@ public class Application implements Cloneable {
         application.link = link;
         application.defaultRewardValue = defaultRewardValue;
         application.defaultRewardType = defaultRewardType;
-        application.words = new ArrayList<>();
+        application.words = new ArrayList<RewardWord>();
         for (RewardWord word : words) {
             application.words.add(word.clone());
         }
         application.oldUsersTable = oldUsersTable;
         if (offers != null) {
-            application.offers = new ArrayList<>();
+            application.offers = new ArrayList<Offer>();
             for (Offer offer : offers) {
                 application.offers.add(offer.clone());
             }

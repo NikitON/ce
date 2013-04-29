@@ -75,7 +75,9 @@ public class SaveAppListener implements ActionListener {
                 } else {
                     checker.check(inputPanel, sb);
                 }
-            } catch (InstantiationException | IllegalAccessException ignored) {
+            } catch (InstantiationException ignored) {
+            } catch (IllegalAccessException ignored) {
+
             }
         }
     }

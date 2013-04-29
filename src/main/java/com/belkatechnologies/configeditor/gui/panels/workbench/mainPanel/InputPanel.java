@@ -36,11 +36,11 @@ public abstract class InputPanel extends JPanel {
     protected InputPanel(Object object, boolean copying) {
         this.inputCount = new AtomicInteger(0);
         this.saveButton = new JButton("SAVE");
-        this.listsMap = new HashMap<>();
-        this.inputs = new HashMap<>();
-        this.comboInputs = new HashMap<>();
-        this.ignored = new ArrayList<>();
-        this.complex = new ArrayList<>();
+        this.listsMap = new HashMap<String, List<?>>();
+        this.inputs = new HashMap<String, JTextComponent>();
+        this.comboInputs = new HashMap<String, JComboBox>();
+        this.ignored = new ArrayList<String>();
+        this.complex = new ArrayList<String>();
         this.edited = object;
         this.copying = copying;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -68,7 +68,7 @@ public abstract class InputPanel extends JPanel {
                     ParameterizedType listType = (ParameterizedType) field.getGenericType();
                     Class<?> listClass = (Class<?>) listType.getActualTypeArguments()[0];
                     addListInput(inputsPanel, fieldName,
-                            new AddListener<>(this, fieldName, listClass),
+                            new AddListener(this, fieldName, listClass),
                             new RemoveListener(this, fieldName));
                 } else if (complex.contains(fieldName)) {
                     addSpecialInput(inputsPanel, fieldName);
@@ -152,7 +152,9 @@ public abstract class InputPanel extends JPanel {
                     } else {
                         listsMap.put(fieldName, (List) PropertyUtils.getProperty(object, fieldName));
                     }
-                } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException ignored) {
+                } catch (InvocationTargetException ignored) {
+                } catch (IllegalAccessException ignored) {
+                } catch (NoSuchMethodException ignored) {
                 }
             }
         }

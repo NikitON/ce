@@ -28,9 +28,9 @@ public class OfferInputPanel extends InputPanel {
 
     @Override
     protected void initListsAndObjects() {
-        listsMap.put("admins", new ArrayList<>());
-        listsMap.put("images", new ArrayList<>());
-        listsMap.put("steps", new ArrayList<>());
+        listsMap.put("admins", new ArrayList<Object>());
+        listsMap.put("images", new ArrayList<Object>());
+        listsMap.put("steps", new ArrayList<Object>());
         complex.add("targeting");
         complex.add("checker");
         ignored.add("CHECKERS");
@@ -63,44 +63,37 @@ public class OfferInputPanel extends InputPanel {
 
     private void addAppIdInput(JPanel inputsPanel) {
         List<Application> apps = TreeManager.getInstance().getApps();
-        JComboBox<Application> comboBox = new JComboBox<>(apps.toArray(new Application[apps.size()]));
+        JComboBox<Application> comboBox = new JComboBox<Application>(apps.toArray(new Application[apps.size()]));
         comboInputs.put("appId", comboBox);
         addRow(inputsPanel, "APP ID", comboBox);
     }
 
     @Override
     protected void addSpecialInput(JPanel inputsPanel, String name) {
-        switch (name) {
-            case "targeting":
-                addSpecialInput(inputsPanel, name, new EditListener<>(this, name, Targeting.class));
-                break;
-            case "checker":
-                addSpecialInput(inputsPanel, name, new EditListener<>(this, name, Checker.class));
-                break;
+        if (name.equals("targeting")) {
+            addSpecialInput(inputsPanel, name, new EditListener<Targeting>(this, name, Targeting.class));
+        } else if (name.equals("checker")) {
+            addSpecialInput(inputsPanel, name, new EditListener<Checker>(this, name, Checker.class));
         }
     }
 
     @Override
     public Object getObject(String name) {
-        switch (name) {
-            case "targeting":
-                return targeting;
-            case "checker":
-                return checker;
-            default:
-                return null;
+        if (name.equals("targeting")) {
+            return targeting;
+        } else if (name.equals("checker")) {
+            return checker;
+        } else {
+            return null;
         }
     }
 
     @Override
     public void setObject(String name, Object object) {
-        switch (name) {
-            case "targeting":
-                targeting = (Targeting) object;
-                break;
-            case "checker":
-                checker = (Checker) object;
-                break;
+        if (name.equals("targeting")) {
+            targeting = (Targeting) object;
+        } else if (name.equals("checker")) {
+            checker = (Checker) object;
         }
     }
 }

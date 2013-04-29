@@ -76,7 +76,7 @@ public class Offer implements Cloneable {
     private static final List<Class<? extends InputChecker>> CHECKERS = initCheckers();
 
     private static List<Class<? extends InputChecker>> initCheckers() {
-        List<Class<? extends InputChecker>> checkers = new ArrayList<>();
+        List<Class<? extends InputChecker>> checkers = new ArrayList<Class<? extends InputChecker>>();
         checkers.add(IDChecker.class);
         checkers.add(IncLevelChecker.class);
         checkers.add(IncLevelDateOffset.class);
@@ -366,7 +366,7 @@ public class Offer implements Cloneable {
         offer.targetURL = targetURL;
         offer.targetURLFormat = targetURLFormat;
         offer.referralURL = referralURL;
-        offer.images = new ArrayList<>();
+        offer.images = new ArrayList<String>();
         for (String image : images) {
             offer.images.add(image);
         }
@@ -375,14 +375,14 @@ public class Offer implements Cloneable {
         offer.shortDescriptions = shortDescriptions;
         offer.description = description;
         offer.rewardText = rewardText;
-        offer.steps = new ArrayList<>();
+        offer.steps = new ArrayList<OfferStep>();
         for (OfferStep step : steps) {
             offer.steps.add(step.clone());
         }
         offer.targeting = targeting.clone();
         offer.checker = checker.clone();
         if (admins != null) {
-            offer.admins = new ArrayList<>();
+            offer.admins = new ArrayList<String>();
             for (String admin : admins) {
                 offer.admins.add(admin);
             }

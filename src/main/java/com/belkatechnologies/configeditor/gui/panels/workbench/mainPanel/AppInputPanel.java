@@ -19,7 +19,7 @@ public class AppInputPanel extends InputPanel {
 
     @Override
     protected void initListsAndObjects() {
-        listsMap.put("words", new ArrayList<>());
+        listsMap.put("words", new ArrayList<Object>());
         ignored.add("offers");
         ignored.add("CHECKERS");
     }

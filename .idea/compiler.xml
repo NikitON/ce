@@ -25,6 +25,9 @@
         <module name="ce" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ce" target="1.6" />
+    </bytecodeTargetLevel>
   </component>
 </project>
 

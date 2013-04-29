@@ -1,5 +1,6 @@
 package com.belkatechnologies.configeditor.listeners.topbuttons;
 
+import com.belkatechnologies.configeditor.logging.Logger;
 import com.belkatechnologies.configeditor.managers.TreeManager;
 
 import java.io.InputStream;
@@ -18,7 +19,7 @@ public class OpenOldXMLListener extends OpenXMLListener {
         try {
             TreeManager.getInstance().deserializeOldXML(inputStream);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error("OPEN XML", e);
         }
     }
 }

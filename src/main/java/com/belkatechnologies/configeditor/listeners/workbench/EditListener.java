@@ -53,7 +53,9 @@ public class EditListener<E> implements ActionListener {
         if (result == JOptionPane.OK_OPTION) {
             try {
                 inputPanel.setObject(name, constructor.newInstance(getValuesFromInputs()));
-            } catch (InstantiationException | InvocationTargetException | IllegalAccessException ignored) {
+            } catch (InstantiationException ignored) {
+            } catch (IllegalAccessException ignored) {
+            } catch (InvocationTargetException ignored) {
             }
         }
         inputPanel.refresh();
@@ -67,7 +69,9 @@ public class EditListener<E> implements ActionListener {
                 try {
                     ((JTextField) dialogInputs[2 * i + 1]).setText((String) PropertyUtils.getProperty(object,
                             fieldName));
-                } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException ignored) {
+                } catch (IllegalAccessException ignored) {
+                } catch (NoSuchMethodException ignored) {
+                } catch (InvocationTargetException ignored) {
                 }
             }
         }
