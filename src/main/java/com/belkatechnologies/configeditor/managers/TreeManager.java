@@ -299,6 +299,10 @@ public class TreeManager {
         return adminList;
     }
 
+    public void refreshTree() {
+        rebuildPanelTree();
+    }
+
     private void rebuildPanelTree() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode(borConfig);
         for (Application application : borConfig.getApps()) {

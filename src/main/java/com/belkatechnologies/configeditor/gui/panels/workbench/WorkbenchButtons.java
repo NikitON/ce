@@ -2,9 +2,9 @@ package com.belkatechnologies.configeditor.gui.panels.workbench;
 
 import com.belkatechnologies.configeditor.gui.Colors;
 import com.belkatechnologies.configeditor.gui.panels.ButtonsPanel;
-import com.belkatechnologies.configeditor.listeners.CopyAppListener;
 import com.belkatechnologies.configeditor.listeners.workbench.AddAppListener;
 import com.belkatechnologies.configeditor.listeners.workbench.AddOfferListener;
+import com.belkatechnologies.configeditor.listeners.workbench.CopyAppListener;
 import com.belkatechnologies.configeditor.listeners.workbench.CopyOfferListener;
 
 import javax.swing.*;

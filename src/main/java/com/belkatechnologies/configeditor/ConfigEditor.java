@@ -16,7 +16,7 @@ public class ConfigEditor extends JFrame {
 
     public ConfigEditor() {
         setTitle("BORSCH");
-        setMinimumSize(new Dimension(1275, 400));
+        setMinimumSize(new Dimension(1275, 475));
         setExtendedState(Frame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

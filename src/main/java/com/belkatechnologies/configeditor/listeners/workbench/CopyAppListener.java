@@ -1,4 +1,4 @@
-package com.belkatechnologies.configeditor.listeners;
+package com.belkatechnologies.configeditor.listeners.workbench;
 
 import com.belkatechnologies.configeditor.managers.TreeManager;
 
