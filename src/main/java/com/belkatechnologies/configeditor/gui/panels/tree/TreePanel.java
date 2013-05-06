@@ -15,7 +15,7 @@ public class TreePanel extends JPanel implements ButtonsStateToggler {
     private TreeButtons buttonsPanel;
 
     public TreePanel() {
-        setPreferredSize(new Dimension(350, 500));
+        setPreferredSize(new Dimension(300, 500));
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, Colors.BORDER));
         scrollPane = new JScrollPane();

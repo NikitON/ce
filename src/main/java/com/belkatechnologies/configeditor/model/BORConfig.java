@@ -68,4 +68,13 @@ public class BORConfig {
         Application app = getAppByID(appId);
         return app != null && app.getOfferByID(offerId) != null;
     }
+
+    public Application getAppByOffer(Offer offer) {
+        for (Application application : apps) {
+            if (application.getOffers().contains(offer)) {
+                return application;
+            }
+        }
+        return null;
+    }
 }

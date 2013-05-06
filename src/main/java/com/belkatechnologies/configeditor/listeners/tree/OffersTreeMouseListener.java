@@ -16,6 +16,7 @@ public class OffersTreeMouseListener extends MouseAdapter {
             try {
                 TreeManager.getInstance().editSelected();
             } catch (NullPointerException ignored) {
+            } catch (CloneNotSupportedException ignored) {
             }
         }
     }

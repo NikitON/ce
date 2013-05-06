@@ -1,6 +1,7 @@
 package com.belkatechnologies.configeditor.gui.panels.workbench.mainPanel;
 
 import com.belkatechnologies.configeditor.listeners.workbench.AddListener;
+import com.belkatechnologies.configeditor.listeners.workbench.ComplexEditListener;
 import com.belkatechnologies.configeditor.listeners.workbench.RemoveListener;
 import com.belkatechnologies.configeditor.listeners.workbench.SimpleEditListener;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -33,7 +34,7 @@ public abstract class InputPanel extends JPanel {
     protected Object edited;
     protected boolean copying;
 
-    protected InputPanel(Object object, boolean copying) {
+    private InputPanel() {
         this.inputCount = new AtomicInteger(0);
         this.saveButton = new JButton("SAVE");
         this.listsMap = new HashMap<String, List<?>>();
@@ -41,22 +42,39 @@ public abstract class InputPanel extends JPanel {
         this.comboInputs = new HashMap<String, JComboBox>();
         this.ignored = new ArrayList<String>();
         this.complex = new ArrayList<String>();
-        this.edited = object;
-        this.copying = copying;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        initListsAndObjects();
+    }
+
+    protected InputPanel(Object object, boolean copying) {
+        this();
+        this.edited = object;
+        this.copying = copying;
+        initListsAndObjects(null);
         add(getInputsPanel());
-        initSaveButtonListener();
+        initSaveButtonListener(edited != null);
         add(saveButton);
         if (edited != null) {
             refresh(edited);
         }
     }
 
-    protected abstract void initListsAndObjects();
+    public InputPanel(Object object, boolean copying, Object application) {
+        this();
+        this.edited = object;
+        this.copying = copying;
+        initListsAndObjects(application);
+        add(getInputsPanel());
+        initSaveButtonListener(edited != null);
+        add(saveButton);
+        if (edited != null) {
+            refresh(edited);
+        }
+    }
 
-    protected abstract void initSaveButtonListener();
+    protected abstract void initListsAndObjects(Object object);
+
+    protected abstract void initSaveButtonListener(boolean replace);
 
     protected abstract JPanel getInputsPanel();
 
@@ -67,8 +85,8 @@ public abstract class InputPanel extends JPanel {
                 if (listsMap.containsKey(fieldName)) {
                     ParameterizedType listType = (ParameterizedType) field.getGenericType();
                     Class<?> listClass = (Class<?>) listType.getActualTypeArguments()[0];
-                    addListInput(inputsPanel, fieldName,
-                            new AddListener(this, fieldName, listClass),
+                    addListInput(inputsPanel, fieldName, new AddListener(this, fieldName, listClass),
+                            new ComplexEditListener(this, fieldName, listClass),
                             new RemoveListener(this, fieldName));
                 } else if (complex.contains(fieldName)) {
                     addSpecialInput(inputsPanel, fieldName);
@@ -85,7 +103,7 @@ public abstract class InputPanel extends JPanel {
         JButton button = new JButton("Expand");
         button.setPreferredSize(new Dimension(100, 22));
         button.addActionListener(new SimpleEditListener(textField));
-        addRow(inputsPanel, name, textField, button, new JPanel());
+        addRow(inputsPanel, name, textField, button);
     }
 
     protected abstract void addSpecialInput(JPanel inputsPanel, String name);
@@ -101,35 +119,43 @@ public abstract class InputPanel extends JPanel {
         JTextField textField = new JTextField(20);
         textField.setFocusable(false);
         inputs.put(name, textField);
-        addRow(inputsPanel, name, textField, component, new JPanel());
+        addRow(inputsPanel, name, textField, component);
     }
 
     protected void addListInput(JPanel inputsPanel, String name, ActionListener addListener,
-                                ActionListener removeListener) {
+                                ActionListener editListener, ActionListener removeListener) {
         JTextField textField = new JTextField(20);
         textField.setFocusable(false);
         inputs.put(name, textField);
         JButton add = new JButton("Add");
         add.addActionListener(addListener);
         add.setPreferredSize(new Dimension(100, 22));
+        JButton edit = new JButton("Edit");
+        edit.addActionListener(editListener);
+        edit.setPreferredSize(new Dimension(100, 22));
         JButton remove = new JButton("Remove");
         remove.addActionListener(removeListener);
         remove.setPreferredSize(new Dimension(100, 22));
-        addRow(inputsPanel, name, textField, add, remove);
+        addRow(inputsPanel, name, textField, add, edit, remove);
     }
 
     protected void addRow(JPanel holder, String name, JComponent component) {
-        addRow(holder, name, component, new JPanel(), new JPanel());
+        addRow(holder, name, component, new JPanel(), new JPanel(), new JPanel());
+    }
+
+    protected void addRow(JPanel holder, String name, JComponent component1, JComponent component2) {
+        addRow(holder, name, component1, component2, new JPanel(), new JPanel());
     }
 
     private void addRow(JPanel holder, String name, JComponent component1, JComponent component2,
-                        JComponent component3) {
+                        JComponent component3, JComponent component4) {
         JLabel label = new JLabel(name, JLabel.TRAILING);
         label.setLabelFor(component1);
         holder.add(label);
         holder.add(component1);
         holder.add(component2);
         holder.add(component3);
+        holder.add(component4);
         inputCount.incrementAndGet();
     }
 

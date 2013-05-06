@@ -18,15 +18,15 @@ public class AppInputPanel extends InputPanel {
     }
 
     @Override
-    protected void initListsAndObjects() {
+    protected void initListsAndObjects(Object object) {
         listsMap.put("words", new ArrayList<Object>());
         ignored.add("offers");
         ignored.add("CHECKERS");
     }
 
     @Override
-    protected void initSaveButtonListener() {
-        saveButton.addActionListener(new SaveAppListener(this, !copying));
+    protected void initSaveButtonListener(boolean replace) {
+        saveButton.addActionListener(new SaveAppListener(this, replace));
     }
 
     @Override
@@ -34,7 +34,7 @@ public class AppInputPanel extends InputPanel {
         JPanel inputsPanel = new JPanel(new SpringLayout());
         Field[] fields = Application.class.getDeclaredFields();
         addInputs(inputsPanel, fields);
-        SpringUtil.makeCompactGrid(inputsPanel, inputCount.get(), 4, 0, 0, 7, 7);
+        SpringUtil.makeCompactGrid(inputsPanel, inputCount.get(), 5, 0, 0, 7, 7);
         return inputsPanel;
     }
 

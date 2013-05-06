@@ -488,24 +488,15 @@ public class TreeManager {
         borConfig.getAppByID(appId).insertOffer(offer);
     }
 
-    public void editSelected() throws NullPointerException {
+    public void editSelected() throws NullPointerException, CloneNotSupportedException {
         TreePath path = tree.getSelectionPath();
         if (path.getPathCount() == 2) {
-            Application app = getAppFromTreePath(path);
+            Application app = getAppFromTreePath(path).clone();
             GUI.getInstance().showAddAppView(app);
         } else if (path.getPathCount() == 3) {
             Offer offer = getOfferFromTreePath(path);
-            GUI.getInstance().showAddOfferView(offer);
+            GUI.getInstance().showAddOfferView(offer.clone(), borConfig.getAppByOffer(offer));
         }
-    }
-
-    public Application getAppByOffer(Offer offer) {
-        for (Application application : borConfig.getApps()) {
-            if (application.getOffers().contains(offer)) {
-                return application;
-            }
-        }
-        return null;
     }
 
     public Application getAppById(String appId) {

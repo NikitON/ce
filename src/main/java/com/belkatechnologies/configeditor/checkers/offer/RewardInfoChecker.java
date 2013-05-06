@@ -70,25 +70,22 @@ public class RewardInfoChecker extends InputChecker {
         if (StringUtil.isOkString(description)) {
             checkReplacers(description, "Description", sb);
         } else {
-            boolean hasAnyDescription = false;
+            boolean hasStepsDescriptions = true;
             for (OfferStep step : steps) {
                 if (StringUtil.isOkString(step.getDescription())) {
-                    hasAnyDescription = true;
+                    hasStepsDescriptions = false;
                     break;
                 }
             }
-            if (!hasAnyDescription && StringUtil.isOkString(shortDescriptions)) {
-                hasAnyDescription = true;
-            }
-            if (!hasAnyDescription) {
-                sb.append("Steps Descriptions: Should not be empty if global description is empty.\n");
+            if (!hasStepsDescriptions && !StringUtil.isOkString(shortDescriptions)) {
+                sb.append("Global description is empty. shortDescriptions or step descriptions should present.\n");
             }
         }
     }
 
     private void checkReplacers(String text, String field, StringBuilder sb) {
-        if (!text.contains("%R_LEVEL%") || !text.contains("%R_TYPE%") || !text.contains("%R_VALUE%")) {
-            sb.append(field).append(": Should contain %R_LEVEL%, %R_VALUE% and %R_TYPE%.\n");
+        if (!text.contains("%R_TYPE%") || !text.contains("%R_VALUE%")) {
+            sb.append(field).append(": Should contain %R_VALUE% and %R_TYPE%.\n");
         }
     }
 

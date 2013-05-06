@@ -11,7 +11,7 @@ import java.awt.*;
  */
 public class SelectPanel extends JPanel {
     public SelectPanel() {
-        setPreferredSize(new Dimension(350, 500));
+        setPreferredSize(new Dimension(300, 500));
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, Colors.BORDER));
     }

@@ -132,8 +132,8 @@ public class GUI implements ButtonsStateToggler {
         workbenchPanel.showAddOfferView(null);
     }
 
-    public void showAddOfferView(Offer offer) {
-        workbenchPanel.showAddOfferView(offer);
+    public void showAddOfferView(Offer offer, Application app) {
+        workbenchPanel.showAddOfferView(offer, app);
     }
 
     public void showAddOfferView(Offer offer, boolean copying) {

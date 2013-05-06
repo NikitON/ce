@@ -15,13 +15,13 @@ import java.lang.reflect.InvocationTargetException;
  * Author: Nikita Khvorov
  * Date: 19.04.13
  */
-public class EditListener<E> implements ActionListener {
+public class SpecialEditListener<E> implements ActionListener {
     protected InputPanel inputPanel;
     protected Constructor<E> constructor;
     private String name;
     protected JComponent[] dialogInputs;
 
-    public EditListener(InputPanel inputPanel, String name, Class<E> clazz) {
+    public SpecialEditListener(InputPanel inputPanel, String name, Class<E> clazz) {
         this.inputPanel = inputPanel;
         this.name = name;
         initClass(clazz);
