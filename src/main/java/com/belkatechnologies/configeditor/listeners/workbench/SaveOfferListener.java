@@ -5,10 +5,7 @@ import com.belkatechnologies.configeditor.checkers.offer.IDChecker;
 import com.belkatechnologies.configeditor.gui.GUI;
 import com.belkatechnologies.configeditor.gui.panels.workbench.mainPanel.InputPanel;
 import com.belkatechnologies.configeditor.managers.TreeManager;
-import com.belkatechnologies.configeditor.model.Checker;
-import com.belkatechnologies.configeditor.model.Offer;
-import com.belkatechnologies.configeditor.model.OfferStep;
-import com.belkatechnologies.configeditor.model.Targeting;
+import com.belkatechnologies.configeditor.model.*;
 import com.belkatechnologies.utils.StringUtil;
 
 import java.awt.event.ActionEvent;
@@ -23,6 +20,7 @@ import java.util.List;
 public class SaveOfferListener implements ActionListener {
     private InputPanel inputPanel;
     private boolean replace;
+    private Application application;
 
     public SaveOfferListener(InputPanel inputPanel, boolean replace) {
         this.inputPanel = inputPanel;
@@ -52,7 +50,8 @@ public class SaveOfferListener implements ActionListener {
 
     private void replaceOffer() {
         Offer offer = createOfferFromInputPanel();
-        TreeManager.getInstance().replaceOffer((Offer) inputPanel.getEdited(), offer);
+        String app = inputPanel.getComboParam("appId");
+        TreeManager.getInstance().replaceOffer(app, offer);
     }
 
     private Offer createOfferFromInputPanel() {

@@ -469,18 +469,17 @@ public class TreeManager {
         rebuildPanelTree();
     }
 
-    public void replaceOffer(Offer oldOffer, Offer newOffer) {
-        Field[] fields = Offer.class.getDeclaredFields();
-        for (Field field : fields) {
-            String fieldName = field.getName();
-            try {
-                Object object = PropertyUtils.getProperty(newOffer, fieldName);
-                PropertyUtils.setProperty(oldOffer, fieldName, object);
-            } catch (IllegalAccessException ignored) {
-            } catch (NoSuchMethodException ignored) {
-            } catch (InvocationTargetException ignored) {
+    public void replaceOffer(String appId, Offer newOffer) {
+        int index = 0;
+        List<Offer> offerList = borConfig.getAppByID(appId).getOffers();
+        for (Offer offer : offerList) {
+            if (offer.getId().equals(newOffer.getId())) {
+                index = offerList.indexOf(offer);
+                offerList.remove(offer);
+                break;
             }
         }
+        offerList.add(index, newOffer);
         rebuildPanelTree();
     }
 

@@ -72,7 +72,7 @@ public class RewardInfoChecker extends InputChecker {
         } else {
             boolean hasStepsDescriptions = true;
             for (OfferStep step : steps) {
-                if (StringUtil.isOkString(step.getDescription())) {
+                if (!StringUtil.isOkString(step.getDescription())) {
                     hasStepsDescriptions = false;
                     break;
                 }

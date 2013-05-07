@@ -102,10 +102,6 @@ public class ComplexEditListener<E> implements ActionListener {
         return values;
     }
 
-    private String getIdFromInputs() {
-        return getInputTextByIndex(0);
-    }
-
     private String getInputTextByIndex(int index) {
         return ((JTextComponent) dialogInputs[2 * index + 1]).getText();
     }

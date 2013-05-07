@@ -47,16 +47,7 @@ public abstract class InputPanel extends JPanel {
     }
 
     protected InputPanel(Object object, boolean copying) {
-        this();
-        this.edited = object;
-        this.copying = copying;
-        initListsAndObjects(null);
-        add(getInputsPanel());
-        initSaveButtonListener(edited != null);
-        add(saveButton);
-        if (edited != null) {
-            refresh(edited);
-        }
+        this(object, copying, null);
     }
 
     public InputPanel(Object object, boolean copying, Object application) {
@@ -65,7 +56,7 @@ public abstract class InputPanel extends JPanel {
         this.copying = copying;
         initListsAndObjects(application);
         add(getInputsPanel());
-        initSaveButtonListener(edited != null);
+        initSaveButtonListener(!copying && edited != null);
         add(saveButton);
         if (edited != null) {
             refresh(edited);
