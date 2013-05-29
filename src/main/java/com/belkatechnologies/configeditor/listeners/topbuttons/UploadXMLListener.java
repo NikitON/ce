@@ -3,7 +3,6 @@ package com.belkatechnologies.configeditor.listeners.topbuttons;
 import com.belkatechnologies.configeditor.gui.GUI;
 import com.belkatechnologies.configeditor.logging.Logger;
 import com.belkatechnologies.configeditor.managers.TreeManager;
-import com.belkatechnologies.configeditor.model.Credentials;
 
 import java.awt.event.ActionEvent;
 
@@ -12,14 +11,10 @@ import java.awt.event.ActionEvent;
  * Date: 18.03.13
  */
 public class UploadXMLListener extends IOXMLListener {
-    private String server;
-    private String path;
-    private Credentials credentials;
+    private String updateURL;
 
     public UploadXMLListener(boolean staging) {
-        this.server = getServer(staging);
-        this.path = getPath(staging);
-        this.credentials = getCredentials(staging);
+        this.updateURL = getUpdateURL(staging);
     }
 
     @Override
@@ -27,7 +22,7 @@ public class UploadXMLListener extends IOXMLListener {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                GUI.getInstance().runLoading("Uploading to " + server);
+                GUI.getInstance().runLoading("Uploading to " + updateURL);
                 uploadTree();
             }
         }).start();
@@ -35,7 +30,7 @@ public class UploadXMLListener extends IOXMLListener {
 
     private void uploadTree() {
         try {
-            TreeManager.getInstance().uploadTree(server, path, credentials);
+            TreeManager.getInstance().uploadTree(updateURL);
         } catch (Exception e) {
             Logger.error("UPLOAD EXCEPTION", e);
         } finally {

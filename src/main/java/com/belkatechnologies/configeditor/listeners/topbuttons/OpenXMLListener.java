@@ -22,7 +22,6 @@ public class OpenXMLListener extends IOXMLListener {
 
     public OpenXMLListener() {
         fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(CURRENT_DIRECTORY);
     }
 
     @Override

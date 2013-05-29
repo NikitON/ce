@@ -1,41 +1,25 @@
 package com.belkatechnologies.configeditor.listeners.topbuttons;
 
 import com.belkatechnologies.configeditor.gui.GUI;
-import com.belkatechnologies.configeditor.model.Credentials;
 
 import java.awt.event.ActionListener;
-import java.io.File;
 
 /**
  * Author: Nikita Khvorov
  * Date: 14.03.13
  */
 public abstract class IOXMLListener implements ActionListener {
-    protected static final File CURRENT_DIRECTORY = new File("d:\\work\\belkaDocs\\temp");
+    protected static final String STAGING_URL = "http://188.93.18.98/BOR-BIDS/updateConfig";
+    protected static final String STAGING_XML_URL = "http://109.234.154.82:81/messages/bor/config.xml";
+    protected static final String PRODUCTION_URL = "http://bor.belkatechnologies.com/BOR-BIDS/updateConfig";
+    protected static final String PRODUCTION_XML_URL = "http://188.93.22.210:81/BOR/config.xml";
 
-    protected static final String STAGING_SERVER = "109.234.154.82";
-    protected static final String STAGING_PATH = "bor/config_test.xml";
-    protected static final Credentials STAGING_CREDENTIALS = new Credentials("writer", "Jd324jdKadpfd");
-
-    protected static final String PRODUCTION_SERVER = "188.93.22.210";
-    protected static final String PRODUCTION_PATH = "config_test.xml";
-    protected static final Credentials PRODUCTION_CREDENTIALS = new Credentials("writer", "GtPa45a91qWc");
-
-    protected String getServer(boolean staging) {
-        return staging ? STAGING_SERVER : PRODUCTION_SERVER;
-    }
-
-    protected String getPath(boolean staging) {
-        return staging ? STAGING_PATH : PRODUCTION_PATH;
+    protected String getUpdateURL(boolean staging) {
+        return staging ? STAGING_URL : PRODUCTION_URL;
     }
 
     protected String getXMLURL(boolean staging) {
-        return "http://" + (staging ? STAGING_SERVER + ":81/messages/" + STAGING_PATH :
-                PRODUCTION_SERVER + ":81/BOR/" + PRODUCTION_PATH);
-    }
-
-    protected Credentials getCredentials(boolean staging) {
-        return staging ? STAGING_CREDENTIALS : PRODUCTION_CREDENTIALS;
+        return staging ? STAGING_XML_URL : PRODUCTION_XML_URL;
     }
 
     protected void notifyWithExceptionMessage(Exception e) {

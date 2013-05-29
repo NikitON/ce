@@ -2,15 +2,19 @@ package com.belkatechnologies.configeditor.managers;
 
 import com.belkatechnologies.configeditor.gui.GUI;
 import com.belkatechnologies.configeditor.gui.panels.tree.OffersTree;
-import com.belkatechnologies.configeditor.logging.Logger;
 import com.belkatechnologies.configeditor.model.*;
 import com.belkatechnologies.utils.DateUtil;
 import com.belkatechnologies.utils.StringUtil;
 import com.belkatechnologies.utils.TimeUtil;
 import com.belkatechnologies.utils.XMLUtil;
+import com.google.gson.Gson;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
@@ -65,39 +69,13 @@ public class TreeManager {
         getDefaultSerializer().write(borConfig, outputStream);
     }
 
-    public void uploadTree(String server, String path, Credentials credentials) {
-        FTPClient ftpClient = new FTPClient();
-        try {
-            Logger.info("UPLOADING START");
-            ftpClient.connect(server, 21);
-            ftpClient.login(credentials.getUsername(), credentials.getPassword());
-            ftpClient.enterLocalPassiveMode();
-            ftpClient.setBufferSize(0);
-            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-            OutputStream outputStream = ftpClient.storeFileStream(path);
-            try {
-                serializeTree(outputStream);
-            } catch (Exception e) {
-                Logger.error("UPLOAD SERIALIZATION", e);
-            } finally {
-                try {
-                    outputStream.close();
-                } catch (IOException e) {
-                    Logger.error("UPLOAD CLOSING STREAM", e);
-                }
-            }
-        } catch (IOException e) {
-            Logger.error("UPLOAD IO", e);
-        } finally {
-            try {
-                if (ftpClient.isConnected()) {
-                    ftpClient.logout();
-                    ftpClient.disconnect();
-                }
-            } catch (IOException e) {
-                Logger.error("UPLOAD DISCONNECT", e);
-            }
-        }
+    public void uploadTree(String url) throws IOException {
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(url);
+        List<NameValuePair> params = new ArrayList<NameValuePair>(1);
+        params.add(new BasicNameValuePair("config", new Gson().toJson(borConfig)));
+        httpPost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+        httpClient.execute(httpPost);
     }
 
     public void deserializeXML(InputStream inputStream) throws Exception {
@@ -107,7 +85,6 @@ public class TreeManager {
     }
 
     public void deserializeOldXML(InputStream inputStream) throws Exception {
-
         Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream);
         doc.normalize();
         ArrayList<EmailGroup> emails = parseEmails(doc);
@@ -489,12 +466,17 @@ public class TreeManager {
 
     public void editSelected() throws NullPointerException, CloneNotSupportedException {
         TreePath path = tree.getSelectionPath();
-        if (path.getPathCount() == 2) {
-            Application app = getAppFromTreePath(path).clone();
-            GUI.getInstance().showAddAppView(app);
-        } else if (path.getPathCount() == 3) {
-            Offer offer = getOfferFromTreePath(path);
-            GUI.getInstance().showAddOfferView(offer.clone(), borConfig.getAppByOffer(offer));
+        switch (path.getPathCount()) {
+            case 1:
+                break;
+            case 2:
+                Application app = getAppFromTreePath(path).clone();
+                GUI.getInstance().showAddAppView(app);
+                break;
+            case 3:
+                Offer offer = getOfferFromTreePath(path);
+                GUI.getInstance().showAddOfferView(offer.clone(), borConfig.getAppByOffer(offer));
+                break;
         }
     }
 

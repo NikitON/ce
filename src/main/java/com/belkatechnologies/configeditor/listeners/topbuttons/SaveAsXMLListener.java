@@ -19,7 +19,6 @@ public class SaveAsXMLListener extends IOXMLListener {
 
     public SaveAsXMLListener() {
         fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(CURRENT_DIRECTORY);
     }
 
     @Override
